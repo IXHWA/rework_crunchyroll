@@ -1,0 +1,227 @@
+/* =====================================================================
+   CR MODERNIZER · CARTES ANIME (style minimaliste)
+   Règle d’or : NE JAMAIS toucher au sizing des images.
+   On agit uniquement sur :
+     - le rectangle visuel (outline + ombre au survol)
+     - un léger lift de la carte au survol
+     - un léger scale-down de l’image au survol
+   ===================================================================== */
+
+/* Alignement haut : pas d’étirement à la plus haute carte */
+html[data-cr-modern-cards="on"] :is(
+  .erc-browse-cards-collection,
+  [class*="erc-browse-cards-collection"],
+  [class*="results-grid"],
+  [class*="cards-grid"]
+) > * {
+  align-self: start !important;
+}
+
+/* Conteneur de carte : transparent, sans border, sans padding parasite */
+html[data-cr-modern-cards="on"] :is(
+  .browse-card,
+  .playable-card,
+  [class*="browse-card"]:not([class*="header"]):not([class*="collection"]),
+  [class*="playable-card"]:not([class*="header"]):not([class*="collection"]),
+  [data-t="series-card"],
+  [data-t="movie-card"]
+) {
+  background: transparent !important;
+  border: 0 !important;
+  outline: none !important;
+  height: fit-content;
+  transition: transform var(--cr-mid) var(--cr-ease-out);
+}
+
+/* Agrandissement subtil de la grille (option) */
+@media (min-width: 700px) {
+  html[data-cr-bigger-cards="on"][data-cr-modern-cards="on"] :is(
+    .erc-browse-cards-collection,
+    [class*="erc-browse-cards-collection"],
+    [class*="results-grid"]
+  ) {
+    grid-template-columns:
+      repeat(auto-fill, minmax(calc(220px * var(--cr-card-zoom)), 1fr)) !important;
+    gap: var(--cr-s-6) !important;
+  }
+}
+
+/* Survol type Netflix : la carte s’agrandit en place, ombre profonde,
+   et passe au-dessus des autres. Pas de panneau qui s’incruste à côté. */
+html[data-cr-modern-cards="on"] :is(
+  .browse-card,
+  .playable-card,
+  [class*="browse-card"]:not([class*="header"]):not([class*="collection"]),
+  [class*="playable-card"]:not([class*="header"]):not([class*="collection"])
+):hover {
+  transform: scale(1.04) translateY(-2px);
+  z-index: 50;
+}
+
+/* Halo orange uniquement sur l’élément de plus haut niveau (.browse-card__image
+   et .playable-card__image), qui correspond au cadre de la vignette chez CR.
+   On n’applique pas à toute la liste de classes pour éviter les surprises. */
+html[data-cr-modern-cards="on"] :is(
+  .browse-card__image,
+  .playable-card__image
+) {
+  border-radius: var(--cr-r-md) !important;
+  outline: 1px solid transparent;
+  outline-offset: -1px;
+  transition:
+    box-shadow var(--cr-mid) var(--cr-ease-out),
+    outline-color var(--cr-mid) var(--cr-ease-out);
+}
+
+html[data-cr-modern-cards="on"] :is(
+  .browse-card,
+  .playable-card,
+  [class*="browse-card"]:not([class*="header"]):not([class*="collection"]),
+  [class*="playable-card"]:not([class*="header"]):not([class*="collection"])
+):hover :is(
+  .browse-card__image,
+  .playable-card__image
+) {
+  outline-color: var(--cr-orange);
+  box-shadow:
+    0 12px 28px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(255, 122, 26, 0.45),
+    0 0 28px var(--cr-orange-glow);
+}
+
+/* Image : juste la transition pour le scale-down au survol — pas de sizing */
+html[data-cr-modern-cards="on"] :is(
+  .browse-card,
+  .playable-card,
+  [class*="browse-card"],
+  [class*="playable-card"]
+) img {
+  transition: transform var(--cr-mid) var(--cr-ease-out);
+}
+
+/* Pas de scale-down sur l’image : on garde l’effet Netflix d’agrandissement
+   global. L’image reste à son ratio. */
+
+/* Titre : couleur orange douce au survol */
+html[data-cr-modern-cards="on"] :is(
+  .browse-card,
+  .playable-card,
+  [class*="browse-card"],
+  [class*="playable-card"]
+) :is(
+  [class*="title"]:not([class*="subtitle"]):not([class*="series-title"]):not([class*="show-title"]),
+  h3,
+  h4
+) {
+  transition: color var(--cr-fast) var(--cr-ease);
+}
+
+html[data-cr-modern-cards="on"] :is(
+  .browse-card,
+  .playable-card,
+  [class*="browse-card"]:not([class*="header"]):not([class*="collection"]),
+  [class*="playable-card"]:not([class*="header"]):not([class*="collection"])
+):hover :is(
+  [class*="title"]:not([class*="subtitle"]):not([class*="series-title"]):not([class*="show-title"]),
+  h3,
+  h4
+) {
+  color: var(--cr-orange-soft);
+}
+
+/* Barre de progression (Reprendre) */
+html[data-cr-modern-cards="on"] :is(
+  .browse-card,
+  .playable-card,
+  [class*="browse-card"],
+  [class*="playable-card"]
+) [class*="progress-bar"]:not([class*="velocity"]),
+html[data-cr-modern-cards="on"] [class*="watch-progress"] {
+  height: 3px !important;
+  border-radius: var(--cr-r-pill) !important;
+  background: rgba(255, 255, 255, 0.14) !important;
+  overflow: hidden;
+}
+
+html[data-cr-modern-cards="on"] :is(
+  .browse-card,
+  .playable-card,
+  [class*="browse-card"],
+  [class*="playable-card"]
+) [class*="progress-bar"]:not([class*="velocity"]) > *,
+html[data-cr-modern-cards="on"] [class*="watch-progress"] > * {
+  background: linear-gradient(90deg, var(--cr-orange), var(--cr-orange-soft)) !important;
+  box-shadow: 0 0 10px var(--cr-orange-glow);
+  border-radius: inherit !important;
+}
+
+/* ====================================================================
+   MODE MINIMAL — uniquement masquages sûrs (pas d’impact sur images)
+   ==================================================================== */
+
+/* Pop-up de survol étendu (Netflix-style → on n’en veut PAS, c’est notre
+   carte qui s’agrandit). Filet large : tout ce qui combine "card" et
+   un mot-clé d’apparition. */
+html[data-cr-minimal-cards="on"] :is(
+  [class*="hover-card"],
+  [class*="hovercard"],
+  [class*="card-hover"],
+  [class*="card-hovered"],
+  [class*="card-popout"],
+  [class*="card-popover"],
+  [class*="card-tooltip"],
+  [class*="card-zoom"],
+  [class*="card-large"],
+  [class*="card-expanded"],
+  [class*="card-extended"],
+  [class*="extended-card"],
+  [class*="expanded-card"],
+  [class*="preview-card"],
+  [class*="PreviewCard"],
+  [class*="hover-preview"],
+  [class*="quickview"],
+  [class*="QuickView"]
+) {
+  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+}
+
+/* Exception : on ne casse pas la barre de progression dont la classe
+   peut contenir « hover » dans certains thèmes */
+html[data-cr-minimal-cards="on"] [class*="progress-bar"][class*="hover"] {
+  display: revert !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  visibility: visible !important;
+}
+
+/* Étoiles & nombre de votes */
+html[data-cr-minimal-cards="on"] :is(
+  .browse-card,
+  .playable-card,
+  [class*="browse-card"],
+  [class*="playable-card"]
+) :is(
+  [class*="star-rating"],
+  [class*="rating-stars"],
+  [class*="rating-bar"],
+  [class*="vote-count"],
+  [class*="ratings-info"]
+) {
+  display: none !important;
+}
+
+/* Synopsis / description sous les cartes (mais PAS les meta-description légitimes) */
+html[data-cr-minimal-cards="on"] :is(
+  .browse-card,
+  .playable-card,
+  [class*="browse-card"],
+  [class*="playable-card"]
+) :is(
+  [class*="card-summary"],
+  [class*="overview-text"]
+) {
+  display: none !important;
+}

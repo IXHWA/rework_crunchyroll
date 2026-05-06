@@ -1,0 +1,52 @@
+/* =====================================================================
+   CR MODERNIZER · KEYFRAMES PARTAGÉS
+   ===================================================================== */
+
+@keyframes cr-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes cr-rise {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes cr-rise-soft {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes cr-scale-in {
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes cr-shimmer {
+  0%   { background-position: -800px 0; }
+  100% { background-position:  800px 0; }
+}
+
+@keyframes cr-glow-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 122, 26, 0.0); }
+  50%      { box-shadow: 0 0 0 8px rgba(255, 122, 26, 0.12); }
+}
+
+@keyframes cr-progress-indeterminate {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(300%); }
+}
+
+/* Skeletons globaux — appliqués par les modules quand pertinent */
+html[data-cr-enabled="on"] [class*="skeleton"],
+html[data-cr-enabled="on"] [class*="placeholder-shimmer"] {
+  background: linear-gradient(
+    90deg,
+    var(--cr-bg-elev-2) 0%,
+    var(--cr-bg-elev-3) 50%,
+    var(--cr-bg-elev-2) 100%
+  );
+  background-size: 800px 100%;
+  animation: cr-shimmer 1.6s linear infinite;
+  border-radius: var(--cr-r-md);
+}

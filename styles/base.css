@@ -1,0 +1,61 @@
+/* =====================================================================
+   CR MODERNIZER · BASE
+   Reset léger + fond + sélection + scrollbar.
+   On ne touche NI aux marges/paddings globaux NI au modèle de boîte
+   pour ne pas casser la mise en page React de Crunchyroll.
+   ===================================================================== */
+
+html[data-cr-enabled="on"] {
+  background-color: var(--cr-bg) !important;
+  color-scheme: dark;
+}
+
+html[data-cr-enabled="on"] body {
+  background-color: var(--cr-bg) !important;
+  color: var(--cr-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Sélection */
+html[data-cr-enabled="on"] ::selection {
+  background: var(--cr-orange);
+  color: #000;
+}
+
+/* Scrollbar (WebKit) */
+html[data-cr-enabled="on"] ::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+html[data-cr-enabled="on"] ::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+html[data-cr-enabled="on"] ::-webkit-scrollbar-thumb {
+  background: var(--cr-bg-elev-3);
+  border-radius: var(--cr-r-pill);
+  border: 2px solid var(--cr-bg);
+  transition: background var(--cr-fast) var(--cr-ease);
+}
+
+html[data-cr-enabled="on"] ::-webkit-scrollbar-thumb:hover {
+  background: var(--cr-orange-deep);
+}
+
+/* Scrollbar (Firefox) */
+@supports (scrollbar-color: red blue) {
+  html[data-cr-enabled="on"] {
+    scrollbar-color: var(--cr-bg-elev-3) transparent;
+    scrollbar-width: thin;
+  }
+}
+
+/* Focus visible — accessible et discret */
+html[data-cr-enabled="on"] :focus-visible {
+  outline: 2px solid var(--cr-orange);
+  outline-offset: 2px;
+  border-radius: var(--cr-r-xs);
+}

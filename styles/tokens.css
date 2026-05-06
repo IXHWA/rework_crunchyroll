@@ -1,0 +1,105 @@
+/* =====================================================================
+   CR MODERNIZER · TOKENS DE DESIGN
+   Toutes les valeurs partagées vivent ici. Modifiez-les pour rethemer.
+   ===================================================================== */
+
+:root {
+  /* ----- Couleurs : surfaces ----- */
+  --cr-bg:            #050506;
+  --cr-bg-elev-1:     #0c0c0e;
+  --cr-bg-elev-2:     #14151a;
+  --cr-bg-elev-3:     #1c1d23;
+  --cr-surface:       rgba(255, 255, 255, 0.04);
+  --cr-surface-hover: rgba(255, 255, 255, 0.08);
+  --cr-overlay:       rgba(0, 0, 0, 0.72);
+
+  /* ----- Couleurs : bordures ----- */
+  --cr-border:        rgba(255, 255, 255, 0.08);
+  --cr-border-strong: rgba(255, 255, 255, 0.16);
+
+  /* ----- Couleurs : texte ----- */
+  --cr-text:          #f4f4f5;
+  --cr-text-muted:    #a1a1aa;
+  --cr-text-dim:      #71717a;
+
+  /* ----- Accent (orange Crunchyroll, retravaillé) ----- */
+  --cr-orange:        #ff7a1a;
+  --cr-orange-soft:   #ff9a4d;
+  --cr-orange-deep:   #d65500;
+  --cr-orange-glow:   rgba(255, 122, 26, 0.32);
+  --cr-orange-tint:   rgba(255, 122, 26, 0.10);
+
+  /* ----- États ----- */
+  --cr-success:       #22c55e;
+  --cr-warn:          #f59e0b;
+  --cr-error:         #ef4444;
+
+  /* ----- Rayons ----- */
+  --cr-r-xs:    6px;
+  --cr-r-sm:    10px;
+  --cr-r-md:    14px;
+  --cr-r-lg:    20px;
+  --cr-r-xl:    28px;
+  --cr-r-pill:  999px;
+
+  /* ----- Espacements ----- */
+  --cr-s-1:  4px;
+  --cr-s-2:  8px;
+  --cr-s-3:  12px;
+  --cr-s-4:  16px;
+  --cr-s-5:  20px;
+  --cr-s-6:  24px;
+  --cr-s-8:  32px;
+  --cr-s-10: 40px;
+  --cr-s-12: 48px;
+
+  /* ----- Ombres ----- */
+  --cr-shadow-sm:   0 2px 8px rgba(0, 0, 0, 0.35);
+  --cr-shadow-md:   0 12px 28px rgba(0, 0, 0, 0.45);
+  --cr-shadow-lg:   0 24px 60px rgba(0, 0, 0, 0.55);
+  --cr-shadow-glow: 0 8px 32px var(--cr-orange-glow);
+  --cr-shadow-ring: 0 0 0 1px var(--cr-border-strong);
+
+  /* ----- Easing & durées ----- */
+  --cr-ease:        cubic-bezier(0.22, 0.61, 0.36, 1);
+  --cr-ease-out:    cubic-bezier(0.16, 1, 0.30, 1);
+  --cr-ease-in:     cubic-bezier(0.30, 0, 0.84, 1);
+  --cr-fast:    140ms;
+  --cr-mid:     280ms;
+  --cr-slow:    480ms;
+  --cr-cinem:   720ms;
+
+  /* ----- Layout ----- */
+  --cr-nav-h:        64px;
+  --cr-content-max:  1480px;
+  --cr-card-min:     220px;
+
+  /* Réglage du zoom des cartes (1 = défaut Crunchyroll, 1.18 = +18 %) */
+  --cr-card-zoom:    1.18;
+
+  /* ----- Typographie ----- */
+  --cr-font:
+    "Lato", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+  --cr-font-display:
+    "Lato", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  /* ----- Échelle lisibilité (module « clarté ») ----- */
+  --cr-t-label:   10px;   /* série, sur-titre */
+  --cr-t-body:    13px;   /* texte courant carte */
+  --cr-t-title:   15px;   /* titre anime / épisode principal */
+  --cr-t-section: clamp(20px, 1.55vw, 28px);
+  --cr-leading-tight: 1.28;
+  --cr-leading-body:  1.45;
+}
+
+/* Mouvement réduit : on aplatit toutes les transitions/animations */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --cr-fast:  0ms;
+    --cr-mid:   0ms;
+    --cr-slow:  0ms;
+    --cr-cinem: 0ms;
+  }
+}

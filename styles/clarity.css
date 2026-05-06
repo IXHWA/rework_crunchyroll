@@ -1,0 +1,197 @@
+/* =====================================================================
+   CR MODERNIZER · CLARTÉ (style Hyakanime)
+   Règles purement typographiques + sub/dub en pilule.
+   AUCUNE manipulation de layout (display:flex, order, margin négatif…)
+   pour ne pas casser les rendus React de Crunchyroll.
+   ===================================================================== */
+
+/* ------------------------------------------------------------------ */
+/*  Accueil : sections aérées, titres minimalistes                     */
+/* ------------------------------------------------------------------ */
+
+html[data-cr-clarity-ui="on"][data-cr-modern-home="on"][data-cr-page="home"] .erc-feed h2,
+html[data-cr-clarity-ui="on"][data-cr-modern-home="on"][data-cr-page="home"] .erc-feed h3 {
+  font-size: clamp(18px, 1.4vw, 22px) !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.015em !important;
+  line-height: var(--cr-leading-tight) !important;
+  color: var(--cr-text) !important;
+  margin-bottom: var(--cr-s-3) !important;
+}
+
+/* Lien « Voir plus / Voir l’historique » : minimaliste, gris doux */
+html[data-cr-clarity-ui="on"][data-cr-page="home"] .erc-feed [class*="see-all"],
+html[data-cr-clarity-ui="on"][data-cr-page="home"] .erc-feed a[href*="history" i],
+html[data-cr-clarity-ui="on"][data-cr-page="home"] [class*="see-all"] {
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.01em !important;
+  color: var(--cr-text-muted) !important;
+  text-transform: none !important;
+}
+
+html[data-cr-clarity-ui="on"][data-cr-page="home"] .erc-feed [class*="see-all"]:hover {
+  color: var(--cr-orange-soft) !important;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Titre principal sous les cartes : net, deux lignes max             */
+/* ------------------------------------------------------------------ */
+
+html[data-cr-clarity-ui="on"][data-cr-modern-cards="on"] :is(
+  .browse-card,
+  .playable-card,
+  [class*="browse-card"]:not([class*="header"]):not([class*="collection"]),
+  [class*="playable-card"]:not([class*="header"]):not([class*="collection"])
+) :is(
+  [class*="title"]:not([class*="subtitle"]):not([class*="series-title"]):not([class*="show-title"]),
+  h3,
+  h4
+) {
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  line-height: var(--cr-leading-tight) !important;
+  letter-spacing: -0.005em !important;
+  color: var(--cr-text) !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Sur-titre série (sur les cartes Reprendre) : étiquette discrète */
+html[data-cr-clarity-ui="on"][data-cr-modern-cards="on"] :is(
+  .playable-card,
+  [class*="playable-card"]:not([class*="collection"])
+) :is(
+  [class*="series-title"],
+  [class*="show-title"],
+  [class*="SeriesTitle"]
+) {
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.14em !important;
+  text-transform: uppercase !important;
+  color: var(--cr-orange-soft) !important;
+  line-height: 1.2 !important;
+  opacity: 0.85;
+}
+
+/* Date de diffusion : petite, discrète */
+html[data-cr-clarity-ui="on"][data-cr-modern-cards="on"] :is(
+  .playable-card,
+  [class*="playable-card"]:not([class*="collection"])
+) :is(
+  [class*="date-row"],
+  [class*="release-date"],
+  [class*="air-date"]
+),
+html[data-cr-clarity-ui="on"][data-cr-modern-cards="on"] :is(
+  .playable-card,
+  [class*="playable-card"]:not([class*="collection"])
+) time[datetime] {
+  font-size: 11px !important;
+  color: var(--cr-text-dim) !important;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ------------------------------------------------------------------ */
+/*  SUB / DUB → pilule discrète, intégrée sous le titre               */
+/* ------------------------------------------------------------------ */
+
+html[data-cr-clarity-ui="on"][data-cr-modern-cards="on"] :is(
+  .browse-card,
+  .playable-card,
+  [class*="browse-card"],
+  [class*="playable-card"]
+) :is(
+  [class*="audio-locales"],
+  [class*="audio-locale-list"],
+  [class*="audio-language"],
+  [class*="lang-info"],
+  [class*="languages-list"]
+) {
+  display: inline-flex !important;
+  align-items: center;
+  width: max-content !important;
+  max-width: 100%;
+  margin-top: 6px !important;
+  padding: 3px 10px !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid rgba(255, 255, 255, 0.10) !important;
+  border-radius: var(--cr-r-pill) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.10em !important;
+  text-transform: uppercase !important;
+  color: var(--cr-text-muted) !important;
+  white-space: nowrap;
+  transition:
+    background var(--cr-fast) var(--cr-ease-out),
+    color var(--cr-fast) var(--cr-ease-out),
+    border-color var(--cr-fast) var(--cr-ease-out);
+}
+
+html[data-cr-clarity-ui="on"][data-cr-modern-cards="on"] :is(
+  .browse-card,
+  .playable-card,
+  [class*="browse-card"],
+  [class*="playable-card"]
+):hover :is(
+  [class*="audio-locales"],
+  [class*="audio-locale-list"],
+  [class*="audio-language"],
+  [class*="lang-info"],
+  [class*="languages-list"]
+) {
+  background: var(--cr-orange-tint) !important;
+  border-color: rgba(255, 122, 26, 0.35) !important;
+  color: var(--cr-orange-soft) !important;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Bouton « Reprendre » des playable-cards : gradient orange propre  */
+/* ------------------------------------------------------------------ */
+
+html[data-cr-clarity-ui="on"][data-cr-modern-cards="on"] :is(
+  .playable-card,
+  [class*="playable-card"]:not([class*="collection"])
+) :is(a, button):is(
+  [class*="resume-button"],
+  [class*="ResumeButton"],
+  [class*="continue-watching-button"]
+) {
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  padding: 8px 14px !important;
+  border-radius: var(--cr-r-pill) !important;
+  background: linear-gradient(135deg, var(--cr-orange), var(--cr-orange-deep)) !important;
+  color: #000 !important;
+  border: 0 !important;
+  box-shadow: 0 6px 18px var(--cr-orange-glow) !important;
+  transition: filter var(--cr-fast) var(--cr-ease-out),
+              box-shadow var(--cr-fast) var(--cr-ease-out);
+}
+
+html[data-cr-clarity-ui="on"][data-cr-modern-cards="on"] :is(
+  .playable-card,
+  [class*="playable-card"]:not([class*="collection"])
+) :is(a, button):is(
+  [class*="resume-button"],
+  [class*="ResumeButton"],
+  [class*="continue-watching-button"]
+):hover {
+  filter: brightness(1.08);
+  box-shadow: 0 10px 28px var(--cr-orange-glow) !important;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Catalogue : grille un peu plus aérée                              */
+/* ------------------------------------------------------------------ */
+
+html[data-cr-clarity-ui="on"][data-cr-modern-browse="on"][data-cr-page="browse"] .erc-browse-cards-collection,
+html[data-cr-clarity-ui="on"][data-cr-modern-browse="on"][data-cr-page="browse"] [class*="results-grid"] {
+  gap: var(--cr-s-6) !important;
+}

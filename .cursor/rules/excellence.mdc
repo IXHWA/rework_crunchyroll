@@ -1,0 +1,10 @@
+---
+description: Livrer chaque tâche jusqu’au bout et dépasser la demande minimale
+globs: "**/*"
+alwaysApply: true
+---
+
+- Terminer les tâches à 100 % : pas de livraison partielle ni d’étapes « à faire plus tard » sans le dire.
+- Anticiper : lisibilité, cohérence visuelle, cas limites, accessibilité, et rechargement / SPA quand on touche au DOM.
+- Si l’utilisateur demande une amélioration, proposer et implémenter la version la plus aboutie raisonnable (structure, réglages, docs utilisateur courtes dans l’UI si pertinent).
+- Après un correctif, vérifier les régressions évidentes (autres pages, autres types de cartes).

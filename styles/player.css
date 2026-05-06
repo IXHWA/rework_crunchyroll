@@ -1,0 +1,361 @@
+/* =====================================================================
+   CR MODERNIZER · LECTEUR VIDÉO (PRIORITÉ MAX)
+   Cible le player Crunchyroll (velocity / vilos) avec des fallbacks
+   robustes. Le tout est verrouillé sur data-cr-page="player" et
+   data-cr-modern-player="on".
+   ===================================================================== */
+
+/* Fond strictement noir, pas de marges parasites */
+html[data-cr-modern-player="on"][data-cr-page="player"],
+html[data-cr-modern-player="on"][data-cr-page="player"] body {
+  background: #000 !important;
+}
+
+/* Conteneurs principaux du player */
+html[data-cr-modern-player="on"][data-cr-page="player"] #vilosRoot,
+html[data-cr-modern-player="on"][data-cr-page="player"] #velocity-controls-package,
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="velocity-player"],
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="player-wrapper"],
+html[data-cr-modern-player="on"][data-cr-page="player"] [data-t="video-player-container"] {
+  background: #000 !important;
+  border-radius: 0 !important;
+}
+
+/* ---------------------------------------------------------------------
+   CONTRÔLES — barre du bas
+   --------------------------------------------------------------------- */
+
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="velocity-controls-package"],
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="vilos-controls"],
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="player-controls"] {
+  position: relative;
+  padding: 12px 20px 18px !important;
+  transition:
+    opacity var(--cr-mid) var(--cr-ease-out),
+    transform var(--cr-mid) var(--cr-ease-out);
+}
+
+/* Voile dégradé sous les contrôles (lisibilité) */
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="velocity-controls-package"]::before,
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="vilos-controls"]::before {
+  content: "";
+  position: absolute;
+  inset: -160px 0 0 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.92) 0%,
+    rgba(0, 0, 0, 0.55) 45%,
+    rgba(0, 0, 0, 0.10) 80%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="velocity-controls-package"] > *,
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="vilos-controls"] > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Voile haut (titre) */
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="player-overlay-top"],
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="vilos-top-controls"] {
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.85) 0%,
+    rgba(0, 0, 0, 0.45) 60%,
+    transparent 100%
+  ) !important;
+  padding: 18px 24px !important;
+}
+
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="player-overlay-top"] [class*="title"],
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="show-title"],
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="episode-title"] {
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
+}
+
+/* ---------------------------------------------------------------------
+   PROGRESS BAR
+   --------------------------------------------------------------------- */
+
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="progress-bar"][class*="velocity"],
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="vilos-scrubber"],
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="seek-bar"] {
+  --bar-h: 4px;
+  height: var(--bar-h) !important;
+  border-radius: var(--cr-r-pill) !important;
+  background: rgba(255, 255, 255, 0.18) !important;
+  cursor: pointer;
+  transition: height var(--cr-fast) var(--cr-ease);
+}
+
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="progress-bar"][class*="velocity"]:hover,
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="vilos-scrubber"]:hover,
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="seek-bar"]:hover {
+  --bar-h: 6px;
+}
+
+/* Portion lue */
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="progress-bar"][class*="velocity"] [class*="filled"],
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="progress-bar"][class*="velocity"] [class*="played"],
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="vilos-scrubber"] [class*="played"],
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="seek-bar"] [class*="played"] {
+  background: linear-gradient(90deg, var(--cr-orange) 0%, var(--cr-orange-soft) 100%) !important;
+  box-shadow: 0 0 14px var(--cr-orange-glow);
+  border-radius: inherit !important;
+}
+
+/* Buffer */
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="buffer"] {
+  background: rgba(255, 255, 255, 0.32) !important;
+}
+
+/* Curseur (knob) */
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="progress-bar"][class*="velocity"] [class*="thumb"],
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="vilos-scrubber"] [class*="thumb"],
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="seek-bar"] [class*="thumb"] {
+  width: 14px !important;
+  height: 14px !important;
+  background: #fff !important;
+  border: 2px solid var(--cr-orange) !important;
+  border-radius: 50% !important;
+  box-shadow: 0 0 0 4px rgba(255, 122, 26, 0.18), 0 4px 12px rgba(0, 0, 0, 0.55);
+  opacity: 0;
+  transform: scale(0.8);
+  transition:
+    opacity var(--cr-fast) var(--cr-ease),
+    transform var(--cr-fast) var(--cr-ease);
+}
+
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="progress-bar"][class*="velocity"]:hover [class*="thumb"],
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="vilos-scrubber"]:hover [class*="thumb"],
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="seek-bar"]:hover [class*="thumb"] {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Tooltip de scrub */
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="scrub-tooltip"],
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="time-tooltip"] {
+  background: rgba(0, 0, 0, 0.85) !important;
+  border: 1px solid var(--cr-border-strong) !important;
+  border-radius: var(--cr-r-sm) !important;
+  padding: 6px 10px !important;
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* ---------------------------------------------------------------------
+   BOUTONS DES CONTRÔLES
+   --------------------------------------------------------------------- */
+
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="velocity-controls"] button,
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="vilos-controls"] button {
+  background: transparent !important;
+  border: none !important;
+  color: var(--cr-text) !important;
+  border-radius: var(--cr-r-pill) !important;
+  width: 40px !important;
+  height: 40px !important;
+  padding: 0 !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background var(--cr-fast) var(--cr-ease),
+    transform var(--cr-fast) var(--cr-ease),
+    color var(--cr-fast) var(--cr-ease);
+}
+
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="velocity-controls"] button:hover,
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="vilos-controls"] button:hover {
+  background: rgba(255, 255, 255, 0.10) !important;
+  color: var(--cr-orange-soft) !important;
+  transform: scale(1.06);
+  box-shadow: none !important;
+}
+
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="velocity-controls"] button[aria-pressed="true"],
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="vilos-controls"] button[aria-pressed="true"] {
+  color: var(--cr-orange) !important;
+}
+
+/* Le bouton play central / overlay */
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="play-pause-button"],
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="big-play"] {
+  width: 48px !important;
+  height: 48px !important;
+}
+
+/* Volume slider */
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="volume-slider"] [class*="track"],
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="volume"] input[type="range"] {
+  height: 3px !important;
+  border-radius: var(--cr-r-pill) !important;
+  background: rgba(255, 255, 255, 0.20) !important;
+}
+
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="volume-slider"] [class*="filled"] {
+  background: var(--cr-orange) !important;
+  border-radius: inherit !important;
+}
+
+/* Compteur de temps */
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="time-display"],
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="velocity-controls"] time,
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="duration"] {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  color: var(--cr-text);
+  font-size: 13px;
+}
+
+/* ---------------------------------------------------------------------
+   MENUS (qualité, vitesse, sous-titres)
+   --------------------------------------------------------------------- */
+
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="settings-menu"],
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="quality-menu"],
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="subtitle-menu"],
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="velocity-controls"] [role="menu"] {
+  background: rgba(12, 12, 14, 0.92) !important;
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  border: 1px solid var(--cr-border-strong) !important;
+  border-radius: var(--cr-r-md) !important;
+  box-shadow: var(--cr-shadow-lg) !important;
+  padding: 6px !important;
+  animation: cr-rise-soft var(--cr-mid) var(--cr-ease-out);
+  min-width: 200px;
+}
+
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="settings-menu"] [role="menuitem"],
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="settings-menu"] button,
+html[data-cr-modern-player="on"][data-cr-page="player"] [role="menu"] [role="menuitem"] {
+  border-radius: var(--cr-r-sm) !important;
+  padding: 10px 12px !important;
+  background: transparent !important;
+  width: 100% !important;
+  height: auto !important;
+  justify-content: flex-start !important;
+  text-align: left;
+  transition: background var(--cr-fast) var(--cr-ease);
+}
+
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="settings-menu"] [role="menuitem"]:hover,
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="settings-menu"] button:hover {
+  background: var(--cr-surface-hover) !important;
+  transform: none !important;
+}
+
+html[data-cr-modern-player="on"][data-cr-page="player"] [role="menuitem"][aria-checked="true"],
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="settings-menu"] [class*="active"] {
+  color: var(--cr-orange-soft) !important;
+  background: var(--cr-orange-tint) !important;
+}
+
+/* ---------------------------------------------------------------------
+   SOUS-TITRES
+   --------------------------------------------------------------------- */
+
+html[data-cr-modern-player="on"][data-cr-page="player"] .libassjs-canvas-parent,
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="subtitle-display"] {
+  text-rendering: geometricPrecision;
+}
+
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="subtitle-display"] [class*="line"],
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="caption-line"] {
+  font-weight: 500 !important;
+  letter-spacing: 0.005em !important;
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.95),
+    0 2px 12px rgba(0, 0, 0, 0.75) !important;
+}
+
+/* ---------------------------------------------------------------------
+   ÉPISODE SUIVANT / CARTES "UP NEXT"
+   --------------------------------------------------------------------- */
+
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="up-next"],
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="next-episode"] {
+  background: rgba(12, 12, 14, 0.92) !important;
+  border: 1px solid var(--cr-border-strong) !important;
+  border-radius: var(--cr-r-md) !important;
+  box-shadow: var(--cr-shadow-lg);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  animation: cr-rise var(--cr-slow) var(--cr-ease-out);
+}
+
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="up-next"] button,
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="next-episode"] button {
+  background: var(--cr-orange) !important;
+  color: #000 !important;
+  font-weight: 700 !important;
+  border-radius: var(--cr-r-md) !important;
+  width: auto !important;
+  height: auto !important;
+  padding: 10px 18px !important;
+  box-shadow: 0 8px 24px var(--cr-orange-glow);
+}
+
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="up-next"] button:hover {
+  background: var(--cr-orange-soft) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Anneau de comptage circulaire */
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="up-next"] [class*="ring"],
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="up-next"] svg circle:last-child {
+  stroke: var(--cr-orange) !important;
+  filter: drop-shadow(0 0 8px var(--cr-orange-glow));
+}
+
+/* ---------------------------------------------------------------------
+   ÉTATS : CHARGEMENT
+   --------------------------------------------------------------------- */
+
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="loading-spinner"],
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="buffering"] {
+  filter: drop-shadow(0 0 12px var(--cr-orange-glow));
+}
+
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="loading-spinner"] svg circle,
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="buffering"] svg circle {
+  stroke: var(--cr-orange) !important;
+}
+
+/* ---------------------------------------------------------------------
+   AUTO-HIDE — quand les contrôles disparaissent, fade fluide
+   --------------------------------------------------------------------- */
+
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="velocity-controls-package"][aria-hidden="true"],
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="vilos-controls"][aria-hidden="true"],
+html[data-cr-modern-player="on"][data-cr-page="player"] [class*="controls-hidden"] {
+  opacity: 0 !important;
+  transform: translateY(8px);
+  pointer-events: none;
+}
+
+/* ---------------------------------------------------------------------
+   AMBIENT MODE (optionnel) — halo lumineux derrière la vidéo
+   --------------------------------------------------------------------- */
+
+html[data-cr-ambient="on"][data-cr-page="player"] body::before {
+  content: "";
+  position: fixed;
+  inset: -10vmax;
+  background:
+    radial-gradient(800px 500px at 30% 30%, rgba(255, 122, 26, 0.10), transparent 60%),
+    radial-gradient(700px 480px at 70% 70%, rgba(120, 60, 220, 0.08), transparent 60%);
+  filter: blur(60px);
+  pointer-events: none;
+  z-index: 0;
+  animation: cr-fade-in var(--cr-cinem) var(--cr-ease-out) both;
+}

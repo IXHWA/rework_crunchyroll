@@ -1,0 +1,211 @@
+/* =====================================================================
+   CR MODERNIZER · CATALOGUE / EXPLORER (style Hyakanime)
+   - barre de recherche LARGE + arrondie
+   - filtres en pilules sombres alignés horizontalement
+   - grille aérée
+   ===================================================================== */
+
+/* ------------------------------------------------------------------ */
+/*  Barre de recherche centrale (page Explorer / Catalogue)            */
+/* ------------------------------------------------------------------ */
+
+html[data-cr-modern-browse="on"][data-cr-page="browse"] :is(
+  [class*="search-bar"]:not(header [class*="search-bar"]),
+  [class*="SearchBar"]:not(header [class*="SearchBar"]),
+  form[role="search"]:not(header form),
+  [type="search"]:not(header [type="search"])
+),
+html[data-cr-modern-browse="on"][data-cr-page="browse"] main input[placeholder*="echerch" i],
+html[data-cr-modern-browse="on"][data-cr-page="browse"] main input[placeholder*="earch" i] {
+  background: var(--cr-bg-elev-2) !important;
+  border: 1px solid var(--cr-border) !important;
+  color: var(--cr-text) !important;
+  border-radius: var(--cr-r-md) !important;
+  padding: 14px 18px 14px 44px !important;
+  font-size: 14px !important;
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto var(--cr-s-6);
+  transition:
+    background var(--cr-fast) var(--cr-ease-out),
+    border-color var(--cr-fast) var(--cr-ease-out),
+    box-shadow var(--cr-fast) var(--cr-ease-out);
+}
+
+html[data-cr-modern-browse="on"][data-cr-page="browse"] main input[placeholder*="echerch" i]:focus,
+html[data-cr-modern-browse="on"][data-cr-page="browse"] main input[placeholder*="earch" i]:focus,
+html[data-cr-modern-browse="on"][data-cr-page="browse"] form[role="search"] input:focus {
+  background: var(--cr-bg-elev-3) !important;
+  border-color: var(--cr-orange) !important;
+  box-shadow: 0 0 0 4px var(--cr-orange-tint) !important;
+  outline: none !important;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Filtres : pilules sombres, label discret                           */
+/* ------------------------------------------------------------------ */
+
+/* Wrapper d’un filtre (label + select) */
+html[data-cr-modern-browse="on"][data-cr-page="browse"] :is(
+  [class*="filter-group"],
+  [class*="FilterGroup"],
+  [class*="filter-control"]
+) {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+}
+
+/* Label au-dessus du filtre */
+html[data-cr-modern-browse="on"][data-cr-page="browse"] :is(
+  [class*="filter-group"],
+  [class*="FilterGroup"]
+) label,
+html[data-cr-modern-browse="on"][data-cr-page="browse"] [class*="filter"] label {
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.04em !important;
+  color: var(--cr-text-muted) !important;
+  text-transform: none !important;
+  margin-bottom: 0 !important;
+}
+
+/* Select / dropdown des filtres en pilule sombre */
+html[data-cr-modern-browse="on"][data-cr-page="browse"] :is(
+  [class*="filter"] select,
+  [class*="FilterGroup"] select,
+  [class*="filter"] button[role="combobox"],
+  [class*="filter"] [class*="dropdown-trigger"],
+  select[aria-label*="ormat" i],
+  select[aria-label*="enre" i],
+  select[aria-label*="aison" i],
+  select[aria-label*="tatut" i],
+  select[aria-label*="nnée" i]
+) {
+  background: var(--cr-bg-elev-2) !important;
+  border: 1px solid var(--cr-border) !important;
+  color: var(--cr-text-muted) !important;
+  border-radius: var(--cr-r-md) !important;
+  padding: 10px 36px 10px 14px !important;
+  font-size: 13px !important;
+  cursor: pointer;
+  transition:
+    background var(--cr-fast) var(--cr-ease-out),
+    border-color var(--cr-fast) var(--cr-ease-out),
+    color var(--cr-fast) var(--cr-ease-out);
+}
+
+html[data-cr-modern-browse="on"][data-cr-page="browse"] :is(
+  [class*="filter"] select,
+  [class*="FilterGroup"] select,
+  [class*="filter"] button[role="combobox"]
+):hover {
+  background: var(--cr-bg-elev-3) !important;
+  border-color: var(--cr-border-strong) !important;
+  color: var(--cr-text) !important;
+}
+
+html[data-cr-modern-browse="on"][data-cr-page="browse"] :is(
+  [class*="filter"] select,
+  [class*="FilterGroup"] select,
+  [class*="filter"] button[role="combobox"]
+):focus,
+html[data-cr-modern-browse="on"][data-cr-page="browse"] :is(
+  [class*="filter"] button[role="combobox"][aria-expanded="true"]
+) {
+  border-color: var(--cr-orange) !important;
+  box-shadow: 0 0 0 3px var(--cr-orange-tint) !important;
+  outline: none !important;
+  color: var(--cr-text) !important;
+}
+
+/* Pilules de filtres rapides (chips) — style alternatif Hyakanime */
+html[data-cr-modern-browse="on"][data-cr-page="browse"] :is(
+  [class*="chip"]:not([class*="filter-chip-icon"]),
+  [class*="genre-tag"],
+  [data-t*="filter"] button:not([role="combobox"])
+) {
+  background: var(--cr-surface) !important;
+  border: 1px solid var(--cr-border) !important;
+  color: var(--cr-text-muted) !important;
+  border-radius: var(--cr-r-pill) !important;
+  padding: 6px 14px !important;
+  font-size: 12px !important;
+  letter-spacing: 0.01em;
+  transition: all var(--cr-fast) var(--cr-ease-out);
+}
+
+html[data-cr-modern-browse="on"][data-cr-page="browse"] :is(
+  [class*="chip"]:not([class*="filter-chip-icon"]),
+  [class*="genre-tag"]
+):hover {
+  background: var(--cr-surface-hover) !important;
+  color: var(--cr-text) !important;
+  border-color: var(--cr-border-strong) !important;
+}
+
+html[data-cr-modern-browse="on"][data-cr-page="browse"] :is(
+  [class*="chip"][aria-pressed="true"],
+  [class*="chip"].active,
+  [class*="chip"][data-selected="true"]
+) {
+  background: var(--cr-orange-tint) !important;
+  border-color: var(--cr-orange) !important;
+  color: var(--cr-orange-soft) !important;
+  box-shadow: 0 0 0 1px var(--cr-orange) inset, 0 0 14px var(--cr-orange-glow);
+}
+
+/* ------------------------------------------------------------------ */
+/*  Titre de page (catégorie)                                          */
+/* ------------------------------------------------------------------ */
+
+html[data-cr-modern-browse="on"][data-cr-page="browse"] :is(
+  h1,
+  [class*="page-title"]
+) {
+  font-weight: 700 !important;
+  letter-spacing: -0.015em !important;
+  font-size: clamp(24px, 2.4vw, 32px) !important;
+}
+
+/* Grille de résultats */
+html[data-cr-modern-browse="on"][data-cr-page="browse"] .erc-browse-cards-collection,
+html[data-cr-modern-browse="on"][data-cr-page="browse"] [class*="results-grid"] {
+  gap: var(--cr-s-6) !important;
+  padding-block: var(--cr-s-4);
+}
+
+/* État vide */
+html[data-cr-modern-browse="on"][data-cr-page="browse"] :is(
+  [class*="no-results"],
+  [class*="empty-state"]
+) {
+  background: var(--cr-bg-elev-1);
+  border: 1px solid var(--cr-border);
+  border-radius: var(--cr-r-lg);
+  padding: var(--cr-s-12) !important;
+  text-align: center;
+}
+
+/* Pagination */
+html[data-cr-modern-browse="on"][data-cr-page="browse"] [class*="pagination"] {
+  display: flex;
+  justify-content: center;
+  gap: var(--cr-s-2);
+  margin-top: var(--cr-s-8);
+}
+
+html[data-cr-modern-browse="on"][data-cr-page="browse"] [class*="pagination"] button {
+  background: var(--cr-surface) !important;
+  border: 1px solid var(--cr-border) !important;
+  color: var(--cr-text-muted) !important;
+  border-radius: var(--cr-r-md) !important;
+  min-width: 40px;
+  transition: all var(--cr-fast) var(--cr-ease);
+}
+
+html[data-cr-modern-browse="on"][data-cr-page="browse"] [class*="pagination"] button[aria-current="page"] {
+  background: var(--cr-orange) !important;
+  border-color: var(--cr-orange) !important;
+  color: #000 !important;
+}

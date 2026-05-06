@@ -1,0 +1,104 @@
+/* =====================================================================
+   CR MODERNIZER · HOMEPAGE (style Hyakanime)
+   Sections aérées, titres minimalistes, hero cinématique, carrousels
+   discrets. AUCUN accent orange en barre verticale (trop bruyant).
+   ===================================================================== */
+
+/* Hero principal de l'accueil : voile dégradé, pas de cadre */
+html[data-cr-modern-home="on"][data-cr-page="home"] .erc-hero-carousel,
+html[data-cr-modern-home="on"][data-cr-page="home"] [class*="hero-carousel"],
+html[data-cr-modern-home="on"][data-cr-page="home"] [class*="hero-section"]:not([class*="-item"]) {
+  position: relative;
+  isolation: isolate;
+}
+
+/* Voile cinéma en bas du hero */
+html[data-cr-modern-home="on"][data-cr-page="home"] .erc-hero-carousel::after,
+html[data-cr-modern-home="on"][data-cr-page="home"] [class*="hero-carousel"]::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 55%;
+  background: linear-gradient(
+    to top,
+    var(--cr-bg) 0%,
+    rgba(5, 5, 6, 0.8) 38%,
+    rgba(5, 5, 6, 0.32) 70%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Texte du hero au-dessus du voile */
+html[data-cr-modern-home="on"][data-cr-page="home"] .erc-hero-carousel [class*="content"],
+html[data-cr-modern-home="on"][data-cr-page="home"] [class*="hero-carousel"] [class*="content"],
+html[data-cr-modern-home="on"][data-cr-page="home"] .erc-hero-carousel h1,
+html[data-cr-modern-home="on"][data-cr-page="home"] .erc-hero-carousel h2 {
+  position: relative;
+  z-index: 2;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.55);
+}
+
+/* Carrousels horizontaux : flèches plus élégantes, masquées au repos */
+html[data-cr-modern-home="on"] [class*="carousel"] button[aria-label*="ext" i],
+html[data-cr-modern-home="on"] [class*="carousel"] button[aria-label*="rev" i],
+html[data-cr-modern-home="on"] [class*="carousel"] button[aria-label*="uiv" i],
+html[data-cr-modern-home="on"] [class*="carousel"] button[aria-label*="rec" i] {
+  background: rgba(0, 0, 0, 0.55) !important;
+  border: 1px solid var(--cr-border) !important;
+  border-radius: var(--cr-r-pill) !important;
+  width: 40px !important;
+  height: 40px !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  opacity: 0;
+  transition:
+    opacity var(--cr-mid) var(--cr-ease),
+    background var(--cr-fast) var(--cr-ease),
+    transform var(--cr-fast) var(--cr-ease);
+}
+
+html[data-cr-modern-home="on"] [class*="carousel"]:hover button[aria-label*="ext" i],
+html[data-cr-modern-home="on"] [class*="carousel"]:hover button[aria-label*="rev" i],
+html[data-cr-modern-home="on"] [class*="carousel"]:hover button[aria-label*="uiv" i],
+html[data-cr-modern-home="on"] [class*="carousel"]:hover button[aria-label*="rec" i] {
+  opacity: 1;
+}
+
+html[data-cr-modern-home="on"] [class*="carousel"] button:hover {
+  background: var(--cr-orange) !important;
+  border-color: var(--cr-orange) !important;
+  transform: scale(1.06);
+}
+
+/* Pagination dots du hero (barres fines orange) */
+html[data-cr-modern-home="on"][data-cr-page="home"] [class*="dots"] button,
+html[data-cr-modern-home="on"][data-cr-page="home"] [class*="indicator"] button {
+  background: var(--cr-border) !important;
+  width: 22px !important;
+  height: 3px !important;
+  border-radius: var(--cr-r-pill) !important;
+  transition: all var(--cr-mid) var(--cr-ease);
+}
+
+html[data-cr-modern-home="on"][data-cr-page="home"] [class*="dots"] button[aria-current],
+html[data-cr-modern-home="on"][data-cr-page="home"] [class*="indicator"] button[aria-selected="true"] {
+  background: var(--cr-orange) !important;
+  width: 32px !important;
+  box-shadow: 0 0 12px var(--cr-orange-glow);
+}
+
+/* Espacement vertical entre les sections (généreux à la Hyakanime) */
+html[data-cr-modern-home="on"][data-cr-page="home"] .erc-feed > * + *,
+html[data-cr-modern-home="on"][data-cr-page="home"] [class*="feed"] > * + * {
+  margin-top: var(--cr-s-12);
+}
+
+/* Apparition douce des sections */
+@media (prefers-reduced-motion: no-preference) {
+  html[data-cr-modern-home="on"][data-cr-page="home"] .erc-feed > section,
+  html[data-cr-modern-home="on"][data-cr-page="home"] [class*="feed-section"] {
+    animation: cr-rise var(--cr-cinem) var(--cr-ease-out) both;
+  }
+}

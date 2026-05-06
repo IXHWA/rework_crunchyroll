@@ -1,0 +1,182 @@
+/* =====================================================================
+   CR MODERNIZER · INTERACTIONS GLOBALES
+   Transitions smooth sur TOUS les éléments interactifs.
+   Activé via data-cr-smooth-hover="on".
+
+   Règles :
+   - durées courtes (140–280 ms) en ease-out
+   - effets discrets : background, color, opacity, transform
+   - on évite les pages sensibles (account, sso, login, profil)
+   ===================================================================== */
+
+/* ------------------------------------------------------------------ */
+/*  Base : transition sur tout ce qui peut être interactif            */
+/*  Sauf pages sensibles                                              */
+/* ------------------------------------------------------------------ */
+
+html[data-cr-smooth-hover="on"]:not([data-cr-page="account"]):not([data-cr-page="player"]) :is(
+  a,
+  button,
+  [role="button"],
+  [role="tab"],
+  [role="menuitem"],
+  [role="option"],
+  [class*="chip"],
+  [class*="pill"],
+  [class*="badge"]:not([class*="card"] [class*="badge"]),
+  [class*="tag"]:not([class*="card"] [class*="tag"]),
+  [class*="link"],
+  [class*="action"],
+  [class*="toggle"],
+  input,
+  select,
+  textarea
+) {
+  transition:
+    color var(--cr-fast) var(--cr-ease-out),
+    background-color var(--cr-fast) var(--cr-ease-out),
+    background var(--cr-fast) var(--cr-ease-out),
+    border-color var(--cr-fast) var(--cr-ease-out),
+    box-shadow var(--cr-fast) var(--cr-ease-out),
+    opacity var(--cr-fast) var(--cr-ease-out),
+    transform var(--cr-mid) var(--cr-ease-out),
+    filter var(--cr-fast) var(--cr-ease-out) !important;
+  will-change: auto;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Liens classiques (hors barre déjà gérée)                          */
+/* ------------------------------------------------------------------ */
+
+html[data-cr-smooth-hover="on"]:not([data-cr-page="account"]) a:not(
+  [class*="card"] a,
+  header a,
+  [class*="logo"] a,
+  [class*="player"] a
+):hover {
+  color: var(--cr-orange-soft) !important;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Boutons icônes (recherche, signet, +, etc.)                        */
+/*  Les boutons-icônes ont souvent une largeur ≤ 48px et un seul SVG  */
+/* ------------------------------------------------------------------ */
+
+html[data-cr-smooth-hover="on"]:not([data-cr-page="account"]):not([data-cr-page="player"])
+button:has(> svg:only-child):not([class*="velocity"]):not([class*="vilos"]):hover,
+html[data-cr-smooth-hover="on"]:not([data-cr-page="account"]):not([data-cr-page="player"])
+[role="button"]:has(> svg:only-child):hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+  transform: scale(1.06);
+}
+
+/* ------------------------------------------------------------------ */
+/*  Icônes SVG : passent à la couleur orange douce au survol         */
+/* ------------------------------------------------------------------ */
+
+html[data-cr-smooth-hover="on"]:not([data-cr-page="account"]):not([data-cr-page="player"]) :is(
+  a,
+  button,
+  [role="button"]
+):hover svg:not([class*="logo"] svg) {
+  filter: drop-shadow(0 0 6px var(--cr-orange-glow));
+}
+
+/* ------------------------------------------------------------------ */
+/*  Avatars / portraits cliquables                                    */
+/* ------------------------------------------------------------------ */
+
+html[data-cr-smooth-hover="on"]:not([data-cr-page="account"]) :is(
+  [class*="avatar"],
+  [class*="profile-pic"],
+  [class*="user-pic"]
+):hover {
+  transform: scale(1.06);
+  filter: brightness(1.08);
+}
+
+/* ------------------------------------------------------------------ */
+/*  Onglets : barre orange qui glisse sous l’onglet actif/hover       */
+/* ------------------------------------------------------------------ */
+
+html[data-cr-smooth-hover="on"]:not([data-cr-page="account"]) [role="tab"]:hover {
+  color: var(--cr-text) !important;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Pilules / chips / filtres : background smooth                     */
+/* ------------------------------------------------------------------ */
+
+html[data-cr-smooth-hover="on"]:not([data-cr-page="account"]) :is(
+  [class*="chip"],
+  [class*="pill"]:not([class*="player"])
+):hover {
+  background: var(--cr-surface-hover) !important;
+  border-color: var(--cr-border-strong) !important;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Inputs : focus avec halo orange smooth                            */
+/* ------------------------------------------------------------------ */
+
+html[data-cr-smooth-hover="on"]:not([data-cr-page="account"]) :is(
+  input,
+  select,
+  textarea
+):not([class*="velocity"]):not([class*="vilos"]):focus {
+  border-color: var(--cr-orange) !important;
+  box-shadow: 0 0 0 3px var(--cr-orange-tint) !important;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Items de menu (dropdowns) : highlight smooth                      */
+/* ------------------------------------------------------------------ */
+
+html[data-cr-smooth-hover="on"]:not([data-cr-page="account"]) [role="menuitem"]:hover,
+html[data-cr-smooth-hover="on"]:not([data-cr-page="account"]) [role="option"]:hover {
+  background: var(--cr-surface-hover) !important;
+  color: var(--cr-text) !important;
+  padding-left: calc(var(--cr-s-3) + 4px) !important;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Élément actif global : petit pulse smooth                         */
+/* ------------------------------------------------------------------ */
+
+html[data-cr-smooth-hover="on"] :is(a, button, [role="button"]):active:not([class*="velocity"]):not([class*="vilos"]) {
+  transform: scale(0.98);
+  transition:
+    transform 80ms var(--cr-ease-out),
+    background-color var(--cr-fast) var(--cr-ease-out) !important;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Effet « ripple-light » sur les boutons : glow orange au survol   */
+/*  uniquement pour les CTA principaux                                */
+/* ------------------------------------------------------------------ */
+
+html[data-cr-smooth-hover="on"] :is(
+  button[class*="primary"],
+  button[class*="cta"],
+  a[class*="cta"]
+):hover {
+  box-shadow:
+    0 8px 22px var(--cr-orange-glow),
+    0 0 0 1px rgba(255, 122, 26, 0.35) !important;
+  filter: brightness(1.06);
+}
+
+/* ------------------------------------------------------------------ */
+/*  Apparition douce des dropdowns / tooltips ouverts                 */
+/* ------------------------------------------------------------------ */
+
+@media (prefers-reduced-motion: no-preference) {
+  html[data-cr-smooth-hover="on"]:not([data-cr-page="account"]) :is(
+    [role="menu"],
+    [role="listbox"],
+    [class*="dropdown-content"],
+    [class*="tooltip-content"]:not([class*="card"])
+  ) {
+    animation: cr-rise-soft 220ms var(--cr-ease-out);
+  }
+}

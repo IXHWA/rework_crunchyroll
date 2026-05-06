@@ -1,0 +1,164 @@
+/* =====================================================================
+   CR MODERNIZER · PAGE SÉRIE / FILM
+   Bannière cinématique, infos lisibles, liste d'épisodes premium.
+   ===================================================================== */
+
+html[data-cr-modern-detail="on"][data-cr-page="detail"] main,
+html[data-cr-modern-detail="on"][data-cr-page="detail"] [class*="series-page"],
+html[data-cr-modern-detail="on"][data-cr-page="detail"] [class*="show-page"] {
+  background: var(--cr-bg);
+}
+
+/* Bannière hero (image de fond) */
+html[data-cr-modern-detail="on"][data-cr-page="detail"] [class*="hero"]:not([class*="-item"]):not([class*="card"]),
+html[data-cr-modern-detail="on"][data-cr-page="detail"] [class*="show-hero"],
+html[data-cr-modern-detail="on"][data-cr-page="detail"] [class*="series-hero"] {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+html[data-cr-modern-detail="on"][data-cr-page="detail"] [class*="hero"]:not([class*="-item"]):not([class*="card"])::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, transparent 0%, var(--cr-bg) 96%),
+    linear-gradient(90deg, var(--cr-bg) 0%, transparent 50%, var(--cr-bg) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+html[data-cr-modern-detail="on"][data-cr-page="detail"] [class*="hero"] [class*="content"],
+html[data-cr-modern-detail="on"][data-cr-page="detail"] [class*="hero"] h1 {
+  position: relative;
+  z-index: 2;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.55);
+}
+
+/* Titre principal */
+html[data-cr-modern-detail="on"][data-cr-page="detail"] h1 {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  font-size: clamp(32px, 4vw, 56px);
+  line-height: 1.05;
+  margin-bottom: var(--cr-s-3);
+}
+
+/* Métadonnées (genres, année, classification) */
+html[data-cr-modern-detail="on"][data-cr-page="detail"] [class*="meta-info"],
+html[data-cr-modern-detail="on"][data-cr-page="detail"] [class*="series-info"] [class*="meta"] {
+  color: var(--cr-text-muted);
+  font-size: 14px;
+  letter-spacing: 0.01em;
+}
+
+/* Genre tags */
+html[data-cr-modern-detail="on"][data-cr-page="detail"] [class*="genre"] a,
+html[data-cr-modern-detail="on"][data-cr-page="detail"] [class*="genre-list"] > * {
+  background: var(--cr-surface) !important;
+  border: 1px solid var(--cr-border) !important;
+  color: var(--cr-text-muted) !important;
+  border-radius: var(--cr-r-pill) !important;
+  padding: 4px 12px !important;
+  font-size: 12px;
+  transition: all var(--cr-fast) var(--cr-ease);
+}
+
+html[data-cr-modern-detail="on"][data-cr-page="detail"] [class*="genre"] a:hover {
+  background: var(--cr-orange-tint) !important;
+  border-color: var(--cr-orange) !important;
+  color: var(--cr-orange-soft) !important;
+}
+
+/* CTA principal "Démarrer" / "Reprendre" */
+html[data-cr-modern-detail="on"][data-cr-page="detail"] [class*="cta-button"],
+html[data-cr-modern-detail="on"][data-cr-page="detail"] button[class*="play"][class*="primary"],
+html[data-cr-modern-detail="on"][data-cr-page="detail"] a[class*="cta"] {
+  background: linear-gradient(135deg, var(--cr-orange) 0%, var(--cr-orange-deep) 100%) !important;
+  color: #000 !important;
+  border: none !important;
+  border-radius: var(--cr-r-md) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.02em;
+  padding: 14px 28px !important;
+  box-shadow: 0 12px 32px var(--cr-orange-glow);
+  transition: all var(--cr-mid) var(--cr-ease);
+}
+
+html[data-cr-modern-detail="on"][data-cr-page="detail"] [class*="cta-button"]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 48px var(--cr-orange-glow);
+  background: linear-gradient(135deg, var(--cr-orange-soft) 0%, var(--cr-orange) 100%) !important;
+}
+
+/* Description / synopsis */
+html[data-cr-modern-detail="on"][data-cr-page="detail"] [class*="description"],
+html[data-cr-modern-detail="on"][data-cr-page="detail"] [class*="synopsis"] {
+  color: var(--cr-text-muted);
+  font-size: 15px;
+  line-height: 1.65;
+  max-width: 70ch;
+}
+
+/* Onglets (Episodes / Personnages / Plus) */
+html[data-cr-modern-detail="on"][data-cr-page="detail"] [role="tablist"],
+html[data-cr-modern-detail="on"][data-cr-page="detail"] [class*="tabs"] {
+  border-bottom: 1px solid var(--cr-border);
+  gap: var(--cr-s-1);
+}
+
+html[data-cr-modern-detail="on"][data-cr-page="detail"] [role="tab"],
+html[data-cr-modern-detail="on"][data-cr-page="detail"] [class*="tab-button"] {
+  background: transparent !important;
+  border: none !important;
+  color: var(--cr-text-muted) !important;
+  padding: 14px 20px !important;
+  border-radius: 0 !important;
+  position: relative;
+  transition: color var(--cr-fast) var(--cr-ease);
+}
+
+html[data-cr-modern-detail="on"][data-cr-page="detail"] [role="tab"]:hover {
+  color: var(--cr-text) !important;
+}
+
+html[data-cr-modern-detail="on"][data-cr-page="detail"] [role="tab"][aria-selected="true"],
+html[data-cr-modern-detail="on"][data-cr-page="detail"] [class*="tab-button"][class*="active"] {
+  color: var(--cr-orange-soft) !important;
+}
+
+html[data-cr-modern-detail="on"][data-cr-page="detail"] [role="tab"][aria-selected="true"]::after {
+  content: "";
+  position: absolute;
+  inset: auto 12px -1px 12px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--cr-orange), var(--cr-orange-soft));
+  border-radius: var(--cr-r-pill);
+  box-shadow: 0 0 12px var(--cr-orange-glow);
+}
+
+/* Liste d'épisodes */
+html[data-cr-modern-detail="on"][data-cr-page="detail"] [class*="episode-list-item"],
+html[data-cr-modern-detail="on"][data-cr-page="detail"] [class*="episode-card"] {
+  background: var(--cr-bg-elev-1) !important;
+  border: 1px solid var(--cr-border) !important;
+  border-radius: var(--cr-r-md) !important;
+  padding: var(--cr-s-3) !important;
+  transition: all var(--cr-mid) var(--cr-ease);
+}
+
+html[data-cr-modern-detail="on"][data-cr-page="detail"] [class*="episode-list-item"]:hover,
+html[data-cr-modern-detail="on"][data-cr-page="detail"] [class*="episode-card"]:hover {
+  background: var(--cr-bg-elev-2) !important;
+  border-color: var(--cr-border-strong) !important;
+  transform: translateX(4px);
+}
+
+/* Sélecteur de saison */
+html[data-cr-modern-detail="on"][data-cr-page="detail"] [class*="season-select"],
+html[data-cr-modern-detail="on"][data-cr-page="detail"] [class*="season-dropdown"] {
+  background: var(--cr-bg-elev-1) !important;
+  border: 1px solid var(--cr-border) !important;
+  border-radius: var(--cr-r-md) !important;
+}

@@ -1,0 +1,39 @@
+{
+  "manifest_version": 3,
+  "name": "Crunchyroll Modernizer",
+  "version": "2.4.0",
+  "description": "Refonte premium et cinématique de Crunchyroll : lecteur immersif, accueil épuré, animations soignées.",
+  "permissions": ["storage"],
+  "host_permissions": ["https://www.crunchyroll.com/*"],
+  "content_scripts": [
+    {
+      "matches": ["https://www.crunchyroll.com/*"],
+      "js": ["content.js"],
+      "css": [
+        "styles/tokens.css",
+        "styles/base.css",
+        "styles/animations.css",
+        "styles/utilities.css",
+        "styles/navigation.css",
+        "styles/homepage.css",
+        "styles/cards.css",
+        "styles/clarity.css",
+        "styles/interactions.css",
+        "styles/catalogue.css",
+        "styles/anime-detail.css",
+        "styles/player.css"
+      ],
+      "run_at": "document_start",
+      "all_frames": true
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Crunchyroll Modernizer"
+  },
+  "icons": {
+    "16": "icons/icon-16.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  }
+}

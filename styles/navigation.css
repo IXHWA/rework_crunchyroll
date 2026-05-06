@@ -1,0 +1,136 @@
+/* =====================================================================
+   CR MODERNIZER · NAVIGATION (BARRE DU HAUT)
+   Cible la VRAIE barre Crunchyroll uniquement.
+   ===================================================================== */
+
+html[data-cr-modern-nav="on"] body > header,
+html[data-cr-modern-nav="on"] header[role="banner"],
+html[data-cr-modern-nav="on"] .erc-header,
+html[data-cr-modern-nav="on"] .erc-top-nav,
+html[data-cr-modern-nav="on"] nav[role="navigation"]:first-of-type {
+  background: linear-gradient(
+    180deg,
+    rgba(8, 8, 10, 0.92) 0%,
+    rgba(8, 8, 10, 0.78) 100%
+  ) !important;
+  backdrop-filter: saturate(160%) blur(14px);
+  -webkit-backdrop-filter: saturate(160%) blur(14px);
+  border-bottom: 1px solid var(--cr-border) !important;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  transition:
+    transform var(--cr-mid) var(--cr-ease),
+    background var(--cr-mid) var(--cr-ease);
+}
+
+/* Liens de la barre principale */
+html[data-cr-modern-nav="on"] body > header a,
+html[data-cr-modern-nav="on"] .erc-header a,
+html[data-cr-modern-nav="on"] .erc-top-nav a {
+  color: var(--cr-text) !important;
+  letter-spacing: 0.01em;
+  position: relative;
+  transition: color var(--cr-fast) var(--cr-ease);
+}
+
+html[data-cr-modern-nav="on"] body > header a:hover,
+html[data-cr-modern-nav="on"] .erc-header a:hover,
+html[data-cr-modern-nav="on"] .erc-top-nav a:hover {
+  color: var(--cr-orange-soft) !important;
+}
+
+/* Soulignement actif/hover (seulement sur les liens directs de la nav) */
+html[data-cr-modern-nav="on"] .erc-top-nav > ul > li > a::after,
+html[data-cr-modern-nav="on"] body > header nav > ul > li > a::after {
+  content: "";
+  position: absolute;
+  left: 12px; right: 12px;
+  bottom: -6px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--cr-orange), var(--cr-orange-soft));
+  border-radius: var(--cr-r-pill);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--cr-mid) var(--cr-ease-out);
+}
+
+html[data-cr-modern-nav="on"] .erc-top-nav > ul > li > a:hover::after,
+html[data-cr-modern-nav="on"] .erc-top-nav > ul > li > a[aria-current]::after,
+html[data-cr-modern-nav="on"] body > header nav > ul > li > a:hover::after {
+  transform: scaleX(1);
+}
+
+/* Logo : préserver l'icône d'origine */
+html[data-cr-modern-nav="on"] [class*="logo"] svg,
+html[data-cr-modern-nav="on"] [aria-label*="Crunchyroll"] svg {
+  filter: drop-shadow(0 0 12px var(--cr-orange-glow));
+  transition: filter var(--cr-mid) var(--cr-ease);
+}
+
+/* Barre de recherche */
+html[data-cr-modern-nav="on"] .erc-search-bar input,
+html[data-cr-modern-nav="on"] header [type="search"],
+html[data-cr-modern-nav="on"] header input[placeholder*="earch" i],
+html[data-cr-modern-nav="on"] header input[placeholder*="echerch" i] {
+  background: var(--cr-surface) !important;
+  border: 1px solid var(--cr-border) !important;
+  color: var(--cr-text) !important;
+  border-radius: var(--cr-r-pill) !important;
+  padding: 10px 16px 10px 40px !important;
+  transition: all var(--cr-mid) var(--cr-ease);
+}
+
+html[data-cr-modern-nav="on"] .erc-search-bar input:focus,
+html[data-cr-modern-nav="on"] header [type="search"]:focus,
+html[data-cr-modern-nav="on"] header input[placeholder*="earch" i]:focus,
+html[data-cr-modern-nav="on"] header input[placeholder*="echerch" i]:focus {
+  background: var(--cr-bg-elev-2) !important;
+  border-color: var(--cr-orange) !important;
+  box-shadow:
+    0 0 0 4px var(--cr-orange-tint),
+    var(--cr-shadow-md) !important;
+  outline: none !important;
+}
+
+/* Avatar utilisateur dans la barre */
+html[data-cr-modern-nav="on"] header [class*="avatar"],
+html[data-cr-modern-nav="on"] header img[alt*="avatar" i] {
+  border-radius: var(--cr-r-pill);
+  transition: transform var(--cr-fast) var(--cr-ease);
+}
+
+html[data-cr-modern-nav="on"] header [class*="avatar"]:hover {
+  transform: scale(1.06);
+}
+
+/* Dropdowns (menus de la barre) */
+html[data-cr-modern-nav="on"] header [role="menu"],
+html[data-cr-modern-nav="on"] header [class*="dropdown-menu"],
+html[data-cr-modern-nav="on"] .erc-top-nav [class*="menu-list"] {
+  background: var(--cr-bg-elev-1) !important;
+  border: 1px solid var(--cr-border) !important;
+  border-radius: var(--cr-r-md) !important;
+  box-shadow: var(--cr-shadow-lg) !important;
+  padding: 6px !important;
+  animation: cr-rise-soft var(--cr-mid) var(--cr-ease-out);
+}
+
+html[data-cr-modern-nav="on"] header [role="menuitem"],
+html[data-cr-modern-nav="on"] header [class*="dropdown-menu"] a {
+  border-radius: var(--cr-r-sm);
+  transition: background var(--cr-fast) var(--cr-ease);
+}
+
+html[data-cr-modern-nav="on"] header [role="menuitem"]:hover,
+html[data-cr-modern-nav="on"] header [class*="dropdown-menu"] a:hover {
+  background: var(--cr-surface-hover) !important;
+}
+
+/* Sécurité : on ne touche PAS aux pages compte/profils/login */
+html[data-cr-page="account"] body > header,
+html[data-cr-page="account"] header[role="banner"] {
+  position: static !important;
+  z-index: auto !important;
+}

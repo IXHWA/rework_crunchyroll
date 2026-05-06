@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Crunchyroll Modernizer</title>
+  <style>
+    :root {
+      --bg: #050506;
+      --bg-1: #0c0c0e;
+      --bg-2: #14151a;
+      --border: rgba(255,255,255,0.08);
+      --border-strong: rgba(255,255,255,0.16);
+      --text: #f4f4f5;
+      --muted: #a1a1aa;
+      --orange: #ff7a1a;
+      --orange-soft: #ff9a4d;
+      --orange-deep: #d65500;
+      --glow: rgba(255,122,26,0.32);
+      --r-sm: 10px;
+      --r-md: 14px;
+      --r-pill: 999px;
+      --ease: cubic-bezier(0.16, 1, 0.30, 1);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0; padding: 0;
+      width: 360px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .header {
+      padding: 18px 20px 14px;
+      border-bottom: 1px solid var(--border);
+      background:
+        radial-gradient(160px 100px at 12% 0%, rgba(255,122,26,0.18), transparent 70%),
+        linear-gradient(180deg, #0a0a0c, #050506);
+    }
+
+    .brand {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .brand .dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--orange), var(--orange-deep));
+      box-shadow: 0 0 14px var(--glow);
+    }
+    .brand h1 {
+      margin: 0; font-size: 15px; font-weight: 700; letter-spacing: -0.01em;
+    }
+    .brand .v {
+      margin-left: auto; font-size: 11px; color: var(--muted);
+      font-variant-numeric: tabular-nums;
+    }
+    .subtitle {
+      margin: 4px 0 0 20px; font-size: 12px; color: var(--muted);
+    }
+
+    .content { padding: 14px; }
+
+    .section {
+      background: var(--bg-1);
+      border: 1px solid var(--border);
+      border-radius: var(--r-md);
+      padding: 6px;
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      padding: 8px 10px 4px;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 10px;
+      border-radius: var(--r-sm);
+      cursor: pointer;
+      transition: background 160ms var(--ease);
+      user-select: none;
+    }
+    .row:hover { background: rgba(255,255,255,0.04); }
+
+    .row .label {
+      flex: 1;
+      display: flex; flex-direction: column; gap: 2px;
+    }
+    .row .label .name {
+      font-size: 13px; font-weight: 500;
+    }
+    .row .label .desc {
+      font-size: 11px; color: var(--muted); line-height: 1.35;
+    }
+
+    .switch {
+      position: relative;
+      flex: 0 0 auto;
+      width: 38px; height: 22px;
+      background: rgba(255,255,255,0.10);
+      border: 1px solid var(--border);
+      border-radius: var(--r-pill);
+      transition: background 200ms var(--ease), border-color 200ms var(--ease);
+    }
+    .switch::after {
+      content: "";
+      position: absolute;
+      top: 2px; left: 2px;
+      width: 16px; height: 16px;
+      background: #fff;
+      border-radius: 50%;
+      transition: transform 220ms var(--ease);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    }
+    .switch[aria-checked="true"] {
+      background: var(--orange);
+      border-color: var(--orange);
+      box-shadow: 0 0 0 4px rgba(255,122,26,0.12);
+    }
+    .switch[aria-checked="true"]::after {
+      transform: translateX(16px);
+    }
+
+    .actions {
+      display: flex; gap: 8px; margin-top: 4px;
+    }
+    button {
+      flex: 1;
+      font-family: inherit;
+      font-size: 12px; font-weight: 600;
+      padding: 10px 12px;
+      border-radius: var(--r-sm);
+      cursor: pointer;
+      transition: all 180ms var(--ease);
+      border: 1px solid var(--border);
+      background: var(--bg-2);
+      color: var(--text);
+    }
+    button:hover { border-color: var(--border-strong); background: rgba(255,255,255,0.06); }
+    button.primary {
+      background: linear-gradient(135deg, var(--orange) 0%, var(--orange-deep) 100%);
+      border-color: transparent;
+      color: #000;
+      box-shadow: 0 8px 24px var(--glow);
+    }
+    button.primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 32px var(--glow);
+    }
+
+    .status {
+      margin-top: 10px;
+      text-align: center;
+      font-size: 11px;
+      color: var(--muted);
+      min-height: 16px;
+      transition: color 160ms var(--ease);
+    }
+    .status.ok { color: #4ade80; }
+    .status.err { color: #ef4444; }
+
+    .footer {
+      padding: 10px 16px;
+      border-top: 1px solid var(--border);
+      font-size: 10px;
+      color: rgba(255,255,255,0.35);
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="brand">
+      <span class="dot"></span>
+      <h1>Crunchyroll Modernizer</h1>
+      <span class="v" id="version">v2.0.0</span>
+    </div>
+    <p class="subtitle">Une expérience cinématique, fluide et premium.</p>
+  </header>
+
+  <main class="content">
+    <section class="section">
+      <div class="section-title">Global</div>
+      <div class="row" data-key="enabled">
+        <div class="label">
+          <span class="name">Activer l’extension</span>
+          <span class="desc">Désactive tous les modules d’un coup.</span>
+        </div>
+        <div class="switch" role="switch" aria-checked="true"></div>
+      </div>
+      <div class="row" data-key="hideShop">
+        <div class="label">
+          <span class="name">Masquer la boutique</span>
+          <span class="desc">Liens cachés. URL directe toujours accessible.</span>
+        </div>
+        <div class="switch" role="switch" aria-checked="true"></div>
+      </div>
+      <div class="row" data-key="smoothHover">
+        <div class="label">
+          <span class="name">Survols animés</span>
+          <span class="desc">Transitions smooth sur liens, boutons, icônes, onglets.</span>
+        </div>
+        <div class="switch" role="switch" aria-checked="true"></div>
+      </div>
+      <div class="row" data-key="reducedMotion">
+        <div class="label">
+          <span class="name">Mouvement réduit</span>
+          <span class="desc">Coupe les animations pour plus de calme.</span>
+        </div>
+        <div class="switch" role="switch" aria-checked="false"></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-title">Modules</div>
+      <div class="row" data-key="modernPlayer">
+        <div class="label">
+          <span class="name">Lecteur premium</span>
+          <span class="desc">Contrôles, progression, sous-titres affinés.</span>
+        </div>
+        <div class="switch" role="switch" aria-checked="true"></div>
+      </div>
+      <div class="row" data-key="ambient">
+        <div class="label">
+          <span class="name">Ambient mode</span>
+          <span class="desc">Halo lumineux subtil autour du lecteur.</span>
+        </div>
+        <div class="switch" role="switch" aria-checked="false"></div>
+      </div>
+      <div class="row" data-key="modernHome">
+        <div class="label">
+          <span class="name">Accueil</span>
+          <span class="desc">Hero cinématique et carrousels élégants.</span>
+        </div>
+        <div class="switch" role="switch" aria-checked="true"></div>
+      </div>
+      <div class="row" data-key="modernCards">
+        <div class="label">
+          <span class="name">Cartes anime</span>
+          <span class="desc">Survol smooth : l’image rétrécit et l’ombre orange apparaît.</span>
+        </div>
+        <div class="switch" role="switch" aria-checked="true"></div>
+      </div>
+      <div class="row" data-key="biggerCards">
+        <div class="label">
+          <span class="name">Images plus grandes</span>
+          <span class="desc">Vignettes mises en valeur dans les grilles et carrousels.</span>
+        </div>
+        <div class="switch" role="switch" aria-checked="true"></div>
+      </div>
+      <div class="row" data-key="minimalCards">
+        <div class="label">
+          <span class="name">Mode minimal</span>
+          <span class="desc">Masque notes, synopsis longs et le hover étendu d’origine.</span>
+        </div>
+        <div class="switch" role="switch" aria-checked="true"></div>
+      </div>
+      <div class="row" data-key="clarityUI">
+        <div class="label">
+          <span class="name">Interface lisible</span>
+          <span class="desc">Titre fort, sub/dub en pilule sur l’image, infos « Reprendre » au survol.</span>
+        </div>
+        <div class="switch" role="switch" aria-checked="true"></div>
+      </div>
+      <div class="row" data-key="modernBrowse">
+        <div class="label">
+          <span class="name">Catalogue</span>
+          <span class="desc">Filtres en pilules, grilles aérées.</span>
+        </div>
+        <div class="switch" role="switch" aria-checked="true"></div>
+      </div>
+      <div class="row" data-key="modernDetail">
+        <div class="label">
+          <span class="name">Page série</span>
+          <span class="desc">Bannière immersive, onglets propres.</span>
+        </div>
+        <div class="switch" role="switch" aria-checked="true"></div>
+      </div>
+      <div class="row" data-key="modernNav">
+        <div class="label">
+          <span class="name">Barre du haut</span>
+          <span class="desc">Sticky, blur et hover orange.</span>
+        </div>
+        <div class="switch" role="switch" aria-checked="true"></div>
+      </div>
+    </section>
+
+    <div class="actions">
+      <button id="reset">Réinitialiser</button>
+      <button class="primary" id="reload">Recharger l’onglet</button>
+    </div>
+
+    <div class="status" id="status"></div>
+  </main>
+
+  <footer class="footer">
+    Aucune donnée n’est envoyée à l’extérieur.
+  </footer>
+
+  <script src="popup.js"></script>
+</body>
+</html>
