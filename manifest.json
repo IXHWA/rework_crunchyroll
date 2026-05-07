@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Crunchyroll Modernizer",
-  "version": "2.4.0",
+  "version": "2.6.1",
   "description": "Refonte premium et cinématique de Crunchyroll : lecteur immersif, accueil épuré, animations soignées.",
   "permissions": ["storage"],
   "host_permissions": ["https://www.crunchyroll.com/*"],
@@ -19,8 +19,11 @@
         "styles/cards.css",
         "styles/clarity.css",
         "styles/interactions.css",
+        "styles/motion.css",
+        "styles/scroll.css",
         "styles/catalogue.css",
         "styles/anime-detail.css",
+        "styles/agenda.css",
         "styles/player.css"
       ],
       "run_at": "document_start",

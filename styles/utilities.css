@@ -1,9 +1,10 @@
 /* =====================================================================
    CR MODERNIZER · UTILITAIRES
-   - Masquage de la boutique (CSS only ; le JS double la sécurité)
+   - Masquage de la boutique / catégories Jeux & News (CSS first)
    - L'accès direct via URL reste possible : seul l'UI est masqué.
    ===================================================================== */
 
+/* ----- Boutique ------------------------------------------------------- */
 html[data-cr-hide-shop="on"] a[href*="/store"],
 html[data-cr-hide-shop="on"] a[href*="store.crunchyroll"],
 html[data-cr-hide-shop="on"] a[href*="/shop"],
@@ -15,16 +16,24 @@ html[data-cr-hide-shop="on"] [class*="merchandise"] {
   display: none !important;
 }
 
-/* Sur la barre du haut, on remonte d'un cran pour cacher l'<li> parent */
-html[data-cr-hide-shop="on"] header a[href*="/store"],
-html[data-cr-hide-shop="on"] header a[href*="/shop"],
-html[data-cr-hide-shop="on"] nav a[href*="/store"],
-html[data-cr-hide-shop="on"] nav a[href*="/shop"] {
-  visibility: hidden;
-  pointer-events: none;
-  width: 0 !important;
-  margin: 0 !important;
-  padding: 0 !important;
+/* ----- Jeux ---------------------------------------------------------- */
+html[data-cr-hide-games="on"] header a[href*="/games"],
+html[data-cr-hide-games="on"] header a[href*="/game/"],
+html[data-cr-hide-games="on"] nav a[href*="/games"],
+html[data-cr-hide-games="on"] nav a[href*="/game/"],
+html[data-cr-hide-games="on"] [role="navigation"] a[href*="/games"],
+html[data-cr-hide-games="on"] [data-t*="games"],
+html[data-cr-hide-games="on"] [class*="games-link"] {
+  display: none !important;
+}
+
+/* ----- News / Actualités --------------------------------------------- */
+html[data-cr-hide-news="on"] header a[href*="/news"],
+html[data-cr-hide-news="on"] nav a[href*="/news"],
+html[data-cr-hide-news="on"] [role="navigation"] a[href*="/news"],
+html[data-cr-hide-news="on"] [data-t*="news"],
+html[data-cr-hide-news="on"] [class*="news-link"] {
+  display: none !important;
 }
 
 /* Aides */

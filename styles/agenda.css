@@ -1,0 +1,711 @@
+/* =====================================================================
+   CR MODERNIZER · AGENDA / SIMULCAST CALENDAR
+   Refonte « Hyakanime » → on respecte le layout natif de Crunchyroll
+   (colonnes horizontales par jour) et on rénove uniquement le visuel.
+   ===================================================================== */
+
+html[data-cr-page="agenda"] body {
+  background: #050507 !important;
+}
+
+/* ---------- HARD RESET sur les backgrounds blancs natifs ----------
+   Crunchyroll utilise des fonds blancs pour certains placeholders
+   (ex. la grosse boîte « Aujourd'hui » vide). On les remplace par
+   un fond cohérent avec le thème sombre.                            */
+html[data-cr-page="agenda"] main *:not(img):not(picture):not(svg):not(input):not(.cr-day-tab) {
+  background-color: transparent;
+}
+
+/* On ne touche surtout pas aux images, picture, svg, video */
+html[data-cr-page="agenda"] main [style*="background-color: rgb(255, 255, 255)"],
+html[data-cr-page="agenda"] main [style*="background-color: #fff"],
+html[data-cr-page="agenda"] main [style*="background-color:#fff"],
+html[data-cr-page="agenda"] main [style*="background: rgb(255, 255, 255)"],
+html[data-cr-page="agenda"] main [style*="background: white"],
+html[data-cr-page="agenda"] main [style*="background:white"],
+html[data-cr-page="agenda"] main [style*="background: #fff"],
+html[data-cr-page="agenda"] main [style*="background:#fff"] {
+  background: rgba(255,255,255,0.02) !important;
+  border: 1px dashed var(--cr-border) !important;
+  border-radius: var(--cr-r-md) !important;
+  color: var(--cr-text-muted) !important;
+}
+
+/* ---------- Conteneur principal ---------- */
+html[data-cr-page="agenda"] main {
+  background: transparent !important;
+  padding-top: var(--cr-s-6) !important;
+  padding-bottom: var(--cr-s-12) !important;
+  max-width: var(--cr-content-max) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: clamp(16px, 4vw, 48px) !important;
+  padding-right: clamp(16px, 4vw, 48px) !important;
+}
+
+/* ---------- En-tête principal de la page ---------- */
+html[data-cr-page="agenda"] main > h1,
+html[data-cr-page="agenda"] [class*="page-header"] h1,
+html[data-cr-page="agenda"] [class*="calendar-title"] {
+  font-family: var(--cr-font-display) !important;
+  font-size: clamp(26px, 2.6vw, 36px) !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.02em !important;
+  color: var(--cr-text) !important;
+  margin: var(--cr-s-2) 0 var(--cr-s-4) !important;
+  line-height: 1.1 !important;
+  text-transform: none !important;
+}
+
+/* ---------- Sélecteur d'onglets natif (Calendrier / Programme) ---------- */
+html[data-cr-page="agenda"] [role="tablist"],
+html[data-cr-page="agenda"] [class*="tab-list"],
+html[data-cr-page="agenda"] [class*="tabs"][class*="container"] {
+  display: inline-flex !important;
+  gap: var(--cr-s-2) !important;
+  background: linear-gradient(135deg,
+              rgba(255,255,255,0.03), rgba(255,255,255,0.01)) !important;
+  border: 1px solid var(--cr-border) !important;
+  border-radius: var(--cr-r-pill) !important;
+  padding: 4px !important;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  margin: 0 0 var(--cr-s-5) !important;
+}
+
+html[data-cr-page="agenda"] [role="tab"] {
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  padding: 8px 16px !important;
+  border-radius: var(--cr-r-pill) !important;
+  color: var(--cr-text-muted) !important;
+  background: transparent !important;
+  border: 0 !important;
+  transition:
+    background var(--cr-fast) var(--cr-ease),
+    color var(--cr-fast) var(--cr-ease) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+html[data-cr-page="agenda"] [role="tab"][aria-selected="true"],
+html[data-cr-page="agenda"] [role="tab"].active,
+html[data-cr-page="agenda"] [role="tab"][class*="--active"] {
+  background: linear-gradient(135deg, var(--cr-orange), var(--cr-orange-deep)) !important;
+  color: #fff !important;
+  box-shadow: 0 4px 16px var(--cr-orange-glow) !important;
+}
+
+/* ---------- Filtres (Premium / Gratuit) ---------- */
+html[data-cr-page="agenda"] [class*="filter"] label,
+html[data-cr-page="agenda"] input[type="radio"] + label,
+html[data-cr-page="agenda"] input[type="checkbox"] + label {
+  color: var(--cr-text-muted) !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+}
+
+/* ---------- Bouton précédent/suivant semaine ---------- */
+html[data-cr-page="agenda"] button[aria-label*="précédent" i],
+html[data-cr-page="agenda"] button[aria-label*="previous" i],
+html[data-cr-page="agenda"] button[aria-label*="suivant" i],
+html[data-cr-page="agenda"] button[aria-label*="next" i] {
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 50% !important;
+  background: rgba(255,255,255,0.06) !important;
+  border: 1px solid var(--cr-border) !important;
+  color: var(--cr-text) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: background var(--cr-fast) var(--cr-ease),
+              border-color var(--cr-fast) var(--cr-ease),
+              transform var(--cr-fast) var(--cr-ease) !important;
+}
+
+html[data-cr-page="agenda"] button[aria-label*="précédent" i]:hover,
+html[data-cr-page="agenda"] button[aria-label*="previous" i]:hover,
+html[data-cr-page="agenda"] button[aria-label*="suivant" i]:hover,
+html[data-cr-page="agenda"] button[aria-label*="next" i]:hover {
+  background: var(--cr-orange-tint) !important;
+  border-color: var(--cr-orange) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* =====================================================================
+   STRUCTURE — On force un layout VERTICAL en pleine page (style Hyakanime)
+   À la place des colonnes horizontales étroites du natif.
+   ===================================================================== */
+
+html[data-cr-page="agenda"] [class*="day-of-week"],
+html[data-cr-page="agenda"] [class*="DayOfWeek"],
+html[data-cr-page="agenda"] [class*="day-section"],
+html[data-cr-page="agenda"] [class*="release-day"],
+html[data-cr-page="agenda"] section[class*="day"],
+html[data-cr-page="agenda"] article[class*="day"] {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  flex: 1 1 100% !important;
+  min-width: 0 !important;
+  margin: 0 0 var(--cr-s-12) !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  scroll-margin-top: calc(var(--cr-nav-h, 64px) + 80px);
+}
+
+/* On force le conteneur direct (taggé par JS) à passer en bloc vertical.
+   Crunchyroll utilise un layout horizontal (flex/grid) avec une colonne
+   par jour : on le casse pour empiler les jours verticalement.        */
+html[data-cr-page="agenda"] [data-cr-day-wrap="1"],
+html[data-cr-page="agenda"] main [class*="calendar-container"],
+html[data-cr-page="agenda"] main [class*="calendar-grid"],
+html[data-cr-page="agenda"] main [class*="week-grid"],
+html[data-cr-page="agenda"] main [class*="days-container"],
+html[data-cr-page="agenda"] main [class*="release-grid"] {
+  display: block !important;
+  grid-template-columns: 1fr !important;
+  grid-template-rows: auto !important;
+  grid-auto-flow: row !important;
+  gap: 0 !important;
+  overflow: visible !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  white-space: normal !important;
+  flex-wrap: wrap !important;
+}
+
+/* En-tête de chaque jour (le bloc Lun./Mar./...) — on cible les headings
+   directs OU descendants d'une section taggée. */
+html[data-cr-page="agenda"] [data-cr-day] > h1,
+html[data-cr-page="agenda"] [data-cr-day] > h2,
+html[data-cr-page="agenda"] [data-cr-day] > h3,
+html[data-cr-page="agenda"] [data-cr-day] > header,
+html[data-cr-page="agenda"] [data-cr-day] > h1:first-of-type,
+html[data-cr-page="agenda"] [data-cr-day] > h2:first-of-type,
+html[data-cr-page="agenda"] [data-cr-day] > h3:first-of-type,
+html[data-cr-page="agenda"] [data-cr-day] > * > h2:first-of-type,
+html[data-cr-page="agenda"] [class*="day-of-week"] > h2,
+html[data-cr-page="agenda"] [class*="day-of-week"] > header,
+html[data-cr-page="agenda"] [class*="day-name"] {
+  display: flex !important;
+  align-items: baseline !important;
+  gap: var(--cr-s-3) !important;
+  font-family: var(--cr-font-display) !important;
+  font-size: clamp(18px, 1.8vw, 24px) !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.01em !important;
+  color: var(--cr-text) !important;
+  text-transform: capitalize !important;
+  margin: 0 0 var(--cr-s-5) !important;
+  padding: 0 0 var(--cr-s-3) !important;
+  border-bottom: 1px solid var(--cr-border) !important;
+  position: relative !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  background: transparent !important;
+}
+
+/* La date (5/4, 5/5...) à côté du jour */
+html[data-cr-page="agenda"] [data-cr-day] > h2 small,
+html[data-cr-page="agenda"] [data-cr-day] > h2 span,
+html[data-cr-page="agenda"] [data-cr-day] > h2 time,
+html[data-cr-page="agenda"] [data-cr-day] > header time,
+html[data-cr-page="agenda"] [class*="day-name"] small,
+html[data-cr-page="agenda"] [class*="day-date"] {
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  color: var(--cr-text-muted) !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+  margin-left: auto !important;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Mise en avant du jour courant */
+html[data-cr-page="agenda"] [data-cr-today="true"] > h2,
+html[data-cr-page="agenda"] [data-cr-today="true"] > header,
+html[data-cr-page="agenda"] [class*="today"] > h2 {
+  color: var(--cr-orange) !important;
+  border-bottom-color: var(--cr-orange-tint) !important;
+}
+
+html[data-cr-page="agenda"] [data-cr-today="true"] > h2::after {
+  content: "Aujourd’hui";
+  font-family: var(--cr-font);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #fff;
+  background: var(--cr-orange);
+  padding: 4px 10px;
+  border-radius: var(--cr-r-pill);
+  margin-left: auto;
+  align-self: center;
+  box-shadow: 0 4px 14px var(--cr-orange-glow);
+}
+
+/* =====================================================================
+   GRILLE DES SORTIES PAR JOUR
+   ===================================================================== */
+
+html[data-cr-page="agenda"] [data-cr-day] ul,
+html[data-cr-page="agenda"] [data-cr-day] ol,
+html[data-cr-page="agenda"] [data-cr-day] [class*="releases"],
+html[data-cr-page="agenda"] [data-cr-day] [class*="episodes"],
+html[data-cr-page="agenda"] [class*="day-of-week"] > ul,
+html[data-cr-page="agenda"] [class*="day-of-week"] > ol {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  display: grid !important;
+  gap: var(--cr-s-4) !important;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)) !important;
+  grid-auto-flow: row !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+}
+
+/* Conteneur direct des cartes si ce n'est pas un ul (div, section, etc.) */
+html[data-cr-page="agenda"] [data-cr-day] > div:has(> [data-cr-card="agenda"]),
+html[data-cr-page="agenda"] [data-cr-day] > section:has(> [data-cr-card="agenda"]) {
+  display: grid !important;
+  gap: var(--cr-s-4) !important;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)) !important;
+  grid-auto-flow: row !important;
+  width: 100% !important;
+}
+
+/* =====================================================================
+   CARTES DE RELEASE — on neutralise les énormes textes natifs
+   ===================================================================== */
+
+html[data-cr-page="agenda"] [data-cr-card="agenda"],
+html[data-cr-page="agenda"] [data-cr-day] li,
+html[data-cr-page="agenda"] [data-cr-day] [class*="release-card"],
+html[data-cr-page="agenda"] [data-cr-day] [class*="ReleaseCard"],
+html[data-cr-page="agenda"] [class*="day-of-week"] li,
+html[data-cr-page="agenda"] [class*="release-list"] > * {
+  position: relative !important;
+  background: linear-gradient(180deg,
+              rgba(255,255,255,0.03),
+              rgba(255,255,255,0.01)) !important;
+  border: 1px solid var(--cr-border) !important;
+  border-radius: var(--cr-r-md) !important;
+  overflow: hidden !important;
+  width: auto !important;
+  max-width: 100% !important;
+  height: auto !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  list-style: none !important;
+  display: block !important;
+  transition:
+    transform var(--cr-mid) var(--cr-ease),
+    border-color var(--cr-mid) var(--cr-ease),
+    box-shadow var(--cr-mid) var(--cr-ease) !important;
+}
+
+html[data-cr-page="agenda"] [data-cr-card="agenda"]:hover,
+html[data-cr-page="agenda"] [data-cr-day] li:hover,
+html[data-cr-page="agenda"] [data-cr-day] [class*="release-card"]:hover,
+html[data-cr-page="agenda"] [class*="day-of-week"] li:hover {
+  transform: translateY(-3px) !important;
+  border-color: var(--cr-orange) !important;
+  box-shadow: var(--cr-shadow-md), 0 0 0 1px var(--cr-orange-tint) !important;
+}
+
+/* Lien interne qui couvre toute la carte */
+html[data-cr-page="agenda"] [data-cr-card="agenda"] > a,
+html[data-cr-page="agenda"] [data-cr-card="agenda"][href*="/series/"],
+html[data-cr-page="agenda"] [data-cr-card="agenda"][href*="/watch/"],
+html[data-cr-page="agenda"] [data-cr-day] li > a {
+  display: flex !important;
+  flex-direction: column !important;
+  text-decoration: none !important;
+  color: inherit !important;
+  height: 100% !important;
+  padding: 0 !important;
+  background: transparent !important;
+}
+
+/* ---------- Image (16/9 forcé, pas plus haut) ---------- */
+html[data-cr-page="agenda"] [data-cr-card="agenda"] img,
+html[data-cr-page="agenda"] [data-cr-card="agenda"] picture,
+html[data-cr-page="agenda"] [data-cr-card="agenda"] picture img,
+html[data-cr-page="agenda"] [data-cr-day] li img,
+html[data-cr-page="agenda"] [data-cr-day] picture,
+html[data-cr-page="agenda"] [data-cr-day] picture img,
+html[data-cr-page="agenda"] [data-cr-day] [class*="release-card"] img,
+html[data-cr-page="agenda"] [data-cr-day] [class*="thumbnail"] img {
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  aspect-ratio: 16 / 9 !important;
+  object-fit: cover !important;
+  border-radius: 0 !important;
+  margin: 0 !important;
+  filter: brightness(0.95);
+  transition: transform var(--cr-mid) var(--cr-ease),
+              filter var(--cr-mid) var(--cr-ease) !important;
+}
+
+html[data-cr-page="agenda"] [data-cr-card="agenda"]:hover img,
+html[data-cr-page="agenda"] [data-cr-card="agenda"]:hover picture img,
+html[data-cr-page="agenda"] [data-cr-day] li:hover img,
+html[data-cr-page="agenda"] [data-cr-day] li:hover picture img {
+  transform: scale(1.04) !important;
+  filter: brightness(1.08) !important;
+}
+
+/* ---------- ZONE TEXTE — on remet les titres à la bonne taille ---------- */
+html[data-cr-page="agenda"] [data-cr-card="agenda"] *,
+html[data-cr-page="agenda"] [data-cr-day] li * {
+  text-transform: none !important;
+}
+
+/* Titre principal (série) — on englobe TOUTES les balises de titre, qu'on
+   soit sur une <li>, sur une carte taggée ou sur une div sans classe. */
+html[data-cr-page="agenda"] [data-cr-card="agenda"] h1,
+html[data-cr-page="agenda"] [data-cr-card="agenda"] h2,
+html[data-cr-page="agenda"] [data-cr-card="agenda"] h3,
+html[data-cr-page="agenda"] [data-cr-card="agenda"] h4,
+html[data-cr-page="agenda"] [data-cr-card="agenda"] h5,
+html[data-cr-page="agenda"] [data-cr-card="agenda"] [class*="series-title"],
+html[data-cr-page="agenda"] [data-cr-card="agenda"] [class*="show-title"],
+html[data-cr-page="agenda"] [data-cr-card="agenda"] [class*="release-title"],
+html[data-cr-page="agenda"] [data-cr-card="agenda"] [class*="title"]:not(time),
+html[data-cr-page="agenda"] [data-cr-day] li h1,
+html[data-cr-page="agenda"] [data-cr-day] li h2,
+html[data-cr-page="agenda"] [data-cr-day] li h3,
+html[data-cr-page="agenda"] [data-cr-day] li h4,
+html[data-cr-page="agenda"] [data-cr-day] li h5,
+html[data-cr-page="agenda"] [data-cr-day] li [class*="series-title"],
+html[data-cr-page="agenda"] [data-cr-day] li [class*="show-title"],
+html[data-cr-page="agenda"] [data-cr-day] li [class*="release-title"],
+html[data-cr-page="agenda"] [data-cr-day] li [class*="title"]:not(time) {
+  font-family: var(--cr-font) !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  line-height: 1.3 !important;
+  letter-spacing: 0 !important;
+  color: var(--cr-text) !important;
+  text-transform: none !important;
+  margin: 0 0 4px !important;
+  padding: 0 !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  word-break: break-word !important;
+  background: transparent !important;
+  border: 0 !important;
+  white-space: normal !important;
+  max-width: 100% !important;
+}
+
+/* Sous-titre / numéro d'épisode / "Episode 6 Disponible" */
+html[data-cr-page="agenda"] [data-cr-card="agenda"] p,
+html[data-cr-page="agenda"] [data-cr-card="agenda"] [class*="episode-title"],
+html[data-cr-page="agenda"] [data-cr-card="agenda"] [class*="episode-info"],
+html[data-cr-page="agenda"] [data-cr-day] li p,
+html[data-cr-page="agenda"] [data-cr-day] li [class*="episode-title"],
+html[data-cr-page="agenda"] [data-cr-day] li [class*="episode-info"] {
+  font-family: var(--cr-font) !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  line-height: 1.4 !important;
+  letter-spacing: 0 !important;
+  color: var(--cr-text-muted) !important;
+  text-transform: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+  white-space: normal !important;
+}
+
+/* Padding global de la zone texte */
+html[data-cr-page="agenda"] [data-cr-card="agenda"] > a > div:not([class*="image"]):not(picture),
+html[data-cr-page="agenda"] [data-cr-card="agenda"] > div:not([class*="image"]):not(picture),
+html[data-cr-page="agenda"] [data-cr-card="agenda"] [class*="release-info"],
+html[data-cr-page="agenda"] [data-cr-card="agenda"] [class*="release-content"],
+html[data-cr-page="agenda"] [data-cr-card="agenda"] [class*="card-content"],
+html[data-cr-page="agenda"] [data-cr-card="agenda"] [class*="card-body"],
+html[data-cr-page="agenda"] [data-cr-card="agenda"] [class*="text"]:not([class*="title"]),
+html[data-cr-page="agenda"] [data-cr-day] li > a > div:not([class*="image"]):not(picture),
+html[data-cr-page="agenda"] [data-cr-day] li > div:not([class*="image"]):not(picture) {
+  padding: 12px 14px 14px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+  background: transparent !important;
+  border: 0 !important;
+  width: 100% !important;
+}
+
+/* ---------- HEURE (badge overlay sur l'image) ---------- */
+html[data-cr-page="agenda"] [data-cr-card="agenda"] time,
+html[data-cr-page="agenda"] [data-cr-card="agenda"] [class*="release-time"],
+html[data-cr-page="agenda"] [data-cr-card="agenda"] [class*="airtime"],
+html[data-cr-page="agenda"] [data-cr-day] li time,
+html[data-cr-page="agenda"] [data-cr-day] li [class*="release-time"],
+html[data-cr-page="agenda"] [data-cr-day] li [class*="airtime"] {
+  position: absolute !important;
+  top: 10px !important;
+  left: 10px !important;
+  z-index: 3 !important;
+  font-family: var(--cr-font) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.04em !important;
+  color: #fff !important;
+  background: rgba(0,0,0,0.78) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  border: 1px solid rgba(255,255,255,0.10) !important;
+  padding: 4px 9px !important;
+  border-radius: var(--cr-r-pill) !important;
+  font-variant-numeric: tabular-nums !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  text-transform: uppercase !important;
+  height: auto !important;
+  width: auto !important;
+  margin: 0 !important;
+}
+
+html[data-cr-page="agenda"] [data-cr-card="agenda"] time::before,
+html[data-cr-page="agenda"] [data-cr-card="agenda"] [class*="release-time"]::before,
+html[data-cr-page="agenda"] [data-cr-day] li time::before,
+html[data-cr-page="agenda"] [data-cr-day] li [class*="release-time"]::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--cr-orange);
+  box-shadow: 0 0 6px var(--cr-orange);
+}
+
+/* ---------- Trait orange séparateur natif → on le neutralise ---------- */
+html[data-cr-page="agenda"] [data-cr-card="agenda"] hr,
+html[data-cr-page="agenda"] [data-cr-card="agenda"] [class*="divider"],
+html[data-cr-page="agenda"] [data-cr-card="agenda"] [style*="border-bottom"],
+html[data-cr-page="agenda"] [data-cr-day] li hr,
+html[data-cr-page="agenda"] [data-cr-day] li [class*="divider"] {
+  display: none !important;
+}
+
+/* ---------- Badges (Sub/Dub/Premium) ---------- */
+html[data-cr-page="agenda"] [data-cr-card="agenda"] [class*="dub"],
+html[data-cr-page="agenda"] [data-cr-card="agenda"] [class*="sub"],
+html[data-cr-page="agenda"] [data-cr-card="agenda"] [class*="audio-locale"],
+html[data-cr-page="agenda"] [data-cr-card="agenda"] [class*="badge"],
+html[data-cr-page="agenda"] [data-cr-card="agenda"] [class*="tag"],
+html[data-cr-page="agenda"] [data-cr-day] li [class*="dub"],
+html[data-cr-page="agenda"] [data-cr-day] li [class*="sub"],
+html[data-cr-page="agenda"] [data-cr-day] li [class*="audio-locale"],
+html[data-cr-page="agenda"] [data-cr-day] li [class*="badge"],
+html[data-cr-page="agenda"] [data-cr-day] li [class*="tag"] {
+  display: inline-flex !important;
+  align-items: center !important;
+  font-size: 9px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  padding: 3px 7px !important;
+  border-radius: var(--cr-r-xs) !important;
+  border: 1px solid var(--cr-border-strong) !important;
+  background: rgba(255,255,255,0.05) !important;
+  color: var(--cr-text-muted) !important;
+  width: auto !important;
+  height: auto !important;
+  margin: 0 4px 0 0 !important;
+}
+
+html[data-cr-page="agenda"] [data-cr-card="agenda"] [class*="premium"],
+html[data-cr-page="agenda"] [data-cr-day] li [class*="premium"] {
+  border-color: var(--cr-orange) !important;
+  color: var(--cr-orange) !important;
+  background: var(--cr-orange-tint) !important;
+}
+
+/* =====================================================================
+   ÉTAT VIDE / PROGRAMMATION À VENIR (≠ grosse boîte blanche)
+   ===================================================================== */
+
+html[data-cr-page="agenda"] [data-cr-day] [class*="empty"],
+html[data-cr-page="agenda"] [data-cr-day] [class*="placeholder"],
+html[data-cr-page="agenda"] [data-cr-day] [class*="coming-soon"],
+html[data-cr-page="agenda"] [data-cr-day] [class*="upcoming"],
+html[data-cr-page="agenda"] [data-cr-day]:empty,
+html[data-cr-page="agenda"] [data-cr-day-empty="true"] {
+  background: rgba(255,255,255,0.02) !important;
+  border: 1px dashed var(--cr-border) !important;
+  border-radius: var(--cr-r-md) !important;
+  padding: var(--cr-s-6) var(--cr-s-4) !important;
+  text-align: center !important;
+  color: var(--cr-text-dim) !important;
+  font-size: 13px !important;
+  font-style: normal !important;
+  margin: 0 !important;
+  min-height: 0 !important;
+  height: auto !important;
+}
+
+/* Brique "Programmation bientôt disponible" : on la transforme en carton */
+html[data-cr-page="agenda"] [data-cr-day]:not(:has(li)):not(:has([class*="release-card"])) {
+  min-height: 0 !important;
+}
+
+/* On neutralise toute boîte blanche éventuelle */
+html[data-cr-page="agenda"] [data-cr-day] [style*="background: white"],
+html[data-cr-page="agenda"] [data-cr-day] [style*="background:#fff"],
+html[data-cr-page="agenda"] [data-cr-day] [style*="background-color: white"],
+html[data-cr-page="agenda"] [data-cr-day] [style*="background-color:#fff"] {
+  background: rgba(255,255,255,0.02) !important;
+}
+
+html[data-cr-page="agenda"] [data-cr-today="true"] {
+  background: linear-gradient(180deg,
+              rgba(255,122,26,0.04),
+              transparent 60%) !important;
+  border-radius: var(--cr-r-lg) !important;
+  padding: var(--cr-s-2) !important;
+  margin-left: calc(-1 * var(--cr-s-2)) !important;
+  margin-right: calc(-1 * var(--cr-s-2)) !important;
+}
+
+/* =====================================================================
+   ONGLETS DE JOUR INJECTÉS PAR JS (cr-day-tabs)
+   ===================================================================== */
+
+.cr-day-tabs {
+  position: sticky;
+  top: var(--cr-nav-h, 64px);
+  z-index: 30;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--cr-s-2);
+  padding: var(--cr-s-3) 0;
+  margin: 0 0 var(--cr-s-6);
+  background: linear-gradient(180deg,
+              rgba(5,5,7,0.92) 0%,
+              rgba(5,5,7,0.82) 100%);
+  backdrop-filter: blur(16px) saturate(120%);
+  -webkit-backdrop-filter: blur(16px) saturate(120%);
+  border-bottom: 1px solid var(--cr-border);
+}
+
+.cr-day-tab {
+  appearance: none;
+  border: 1px solid var(--cr-border);
+  background: rgba(255,255,255,0.03);
+  color: var(--cr-text-muted);
+  padding: 10px 18px;
+  border-radius: var(--cr-r-pill);
+  font-family: var(--cr-font);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.1;
+  gap: 2px;
+  position: relative;
+  transition:
+    background var(--cr-fast) var(--cr-ease),
+    border-color var(--cr-fast) var(--cr-ease),
+    color var(--cr-fast) var(--cr-ease),
+    transform var(--cr-fast) var(--cr-ease);
+}
+
+.cr-day-tab small {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--cr-text-dim);
+  letter-spacing: 0.06em;
+}
+
+.cr-day-tab:hover {
+  background: var(--cr-surface-hover);
+  color: var(--cr-text);
+  transform: translateY(-1px);
+}
+
+.cr-day-tab[data-cr-active="true"] {
+  background: linear-gradient(135deg, var(--cr-orange), var(--cr-orange-deep));
+  border-color: transparent;
+  color: #fff;
+  box-shadow: 0 6px 20px rgba(255, 122, 26, 0.35);
+}
+
+.cr-day-tab[data-cr-active="true"] small {
+  color: rgba(255,255,255,0.85);
+}
+
+.cr-day-tab[data-cr-today="true"]:not([data-cr-active="true"])::after {
+  content: "";
+  position: absolute;
+  top: 6px; right: 8px;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--cr-orange);
+  box-shadow: 0 0 8px var(--cr-orange);
+}
+
+/* ---------- Mode "focus jour unique" ---------- */
+html[data-cr-page="agenda"][data-cr-day-focus] [data-cr-day]:not([data-cr-day-active="true"]) {
+  display: none !important;
+}
+
+/* ---------- Apparition cinématique des cartes ---------- */
+@keyframes cr-agenda-card-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+html[data-cr-page="agenda"][data-cr-motion="on"] [data-cr-card="agenda"],
+html[data-cr-page="agenda"][data-cr-motion="on"] [data-cr-day] li {
+  animation: cr-agenda-card-in var(--cr-mid) var(--cr-ease) both;
+}
+
+html[data-cr-page="agenda"][data-cr-motion="on"] [data-cr-day] [data-cr-card="agenda"]:nth-child(1),
+html[data-cr-page="agenda"][data-cr-motion="on"] [data-cr-day] li:nth-child(1)  { animation-delay:  0ms; }
+html[data-cr-page="agenda"][data-cr-motion="on"] [data-cr-day] [data-cr-card="agenda"]:nth-child(2),
+html[data-cr-page="agenda"][data-cr-motion="on"] [data-cr-day] li:nth-child(2)  { animation-delay: 25ms; }
+html[data-cr-page="agenda"][data-cr-motion="on"] [data-cr-day] [data-cr-card="agenda"]:nth-child(3),
+html[data-cr-page="agenda"][data-cr-motion="on"] [data-cr-day] li:nth-child(3)  { animation-delay: 50ms; }
+html[data-cr-page="agenda"][data-cr-motion="on"] [data-cr-day] [data-cr-card="agenda"]:nth-child(4),
+html[data-cr-page="agenda"][data-cr-motion="on"] [data-cr-day] li:nth-child(4)  { animation-delay: 75ms; }
+html[data-cr-page="agenda"][data-cr-motion="on"] [data-cr-day] [data-cr-card="agenda"]:nth-child(5),
+html[data-cr-page="agenda"][data-cr-motion="on"] [data-cr-day] li:nth-child(5)  { animation-delay:100ms; }
+html[data-cr-page="agenda"][data-cr-motion="on"] [data-cr-day] [data-cr-card="agenda"]:nth-child(n+6),
+html[data-cr-page="agenda"][data-cr-motion="on"] [data-cr-day] li:nth-child(n+6){ animation-delay:130ms; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 720px) {
+  html[data-cr-page="agenda"] [data-cr-day] > ul,
+  html[data-cr-page="agenda"] [class*="day-of-week"] > ul {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)) !important;
+    gap: var(--cr-s-3) !important;
+  }
+  .cr-day-tab {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+}

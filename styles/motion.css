@@ -1,0 +1,85 @@
+/* =====================================================================
+   CR MODERNIZER · MOTION
+   Animations de navigation et apparitions au scroll.
+   Activé via data-cr-motion="on".
+   ===================================================================== */
+
+/* ------------------------------------------------------------------ */
+/*  Transition de page (navigation SPA)                                */
+/*  content.js ajoute data-cr-pt="enter" 1 frame, puis le retire.     */
+/* ------------------------------------------------------------------ */
+
+@media (prefers-reduced-motion: no-preference) {
+  html[data-cr-motion="on"][data-cr-pt="enter"] main,
+  html[data-cr-motion="on"][data-cr-pt="enter"] .erc-feed,
+  html[data-cr-motion="on"][data-cr-pt="enter"] [class*="page-content"] {
+    animation: cr-page-in 380ms var(--cr-ease-out) both;
+  }
+}
+
+@keyframes cr-page-in {
+  from { opacity: 0; transform: translateY(14px); filter: blur(6px); }
+  to   { opacity: 1; transform: translateY(0);    filter: blur(0); }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Reveal au scroll                                                  */
+/*  content.js applique data-cr-reveal="false" puis "true" via IO.    */
+/* ------------------------------------------------------------------ */
+
+html[data-cr-motion="on"] [data-cr-reveal="false"] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 520ms var(--cr-ease-out),
+    transform 520ms var(--cr-ease-out);
+  will-change: opacity, transform;
+}
+
+html[data-cr-motion="on"] [data-cr-reveal="true"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Effet « cascade » sur les cellules d’une grille */
+html[data-cr-motion="on"] [data-cr-reveal-children="true"] > * {
+  animation: cr-rise-soft 480ms var(--cr-ease-out) both;
+}
+html[data-cr-motion="on"] [data-cr-reveal-children="true"] > *:nth-child(1)  { animation-delay:  0ms; }
+html[data-cr-motion="on"] [data-cr-reveal-children="true"] > *:nth-child(2)  { animation-delay: 40ms; }
+html[data-cr-motion="on"] [data-cr-reveal-children="true"] > *:nth-child(3)  { animation-delay: 80ms; }
+html[data-cr-motion="on"] [data-cr-reveal-children="true"] > *:nth-child(4)  { animation-delay:120ms; }
+html[data-cr-motion="on"] [data-cr-reveal-children="true"] > *:nth-child(5)  { animation-delay:160ms; }
+html[data-cr-motion="on"] [data-cr-reveal-children="true"] > *:nth-child(6)  { animation-delay:200ms; }
+html[data-cr-motion="on"] [data-cr-reveal-children="true"] > *:nth-child(7)  { animation-delay:240ms; }
+html[data-cr-motion="on"] [data-cr-reveal-children="true"] > *:nth-child(n+8){ animation-delay:280ms; }
+
+/* ------------------------------------------------------------------ */
+/*  Image qui fade-in au chargement (data-cr-img-loaded posé en JS)   */
+/* ------------------------------------------------------------------ */
+
+html[data-cr-motion="on"] img[data-cr-fade]:not([data-cr-img-loaded="1"]) {
+  opacity: 0;
+  filter: blur(8px) saturate(1.3);
+  transform: scale(1.02);
+  transition:
+    opacity 380ms var(--cr-ease-out),
+    filter 380ms var(--cr-ease-out),
+    transform 480ms var(--cr-ease-out);
+}
+
+html[data-cr-motion="on"] img[data-cr-fade][data-cr-img-loaded="1"] {
+  opacity: 1;
+  filter: blur(0) saturate(1);
+  transform: scale(1);
+}
+
+/* ------------------------------------------------------------------ */
+/*  Smooth scroll natif                                                */
+/* ------------------------------------------------------------------ */
+
+@media (prefers-reduced-motion: no-preference) {
+  html[data-cr-motion="on"] {
+    scroll-behavior: smooth;
+  }
+}

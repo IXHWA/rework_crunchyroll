@@ -6,6 +6,8 @@
 const DEFAULTS = {
   enabled:        true,
   hideShop:       true,
+  hideGames:      true,
+  hideNews:       true,
   modernNav:      true,
   modernHome:     true,
   modernCards:    true,
@@ -13,6 +15,8 @@ const DEFAULTS = {
   clarityUI:      true,
   biggerCards:    true,
   smoothHover:    true,
+  motion:         true,
+  scrollTools:    true,
   modernBrowse:   true,
   modernDetail:   true,
   modernPlayer:   true,
