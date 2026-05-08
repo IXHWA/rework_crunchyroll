@@ -1,256 +1,141 @@
-# 📚 INDEX COMPLET - Crunchyroll Modernizer
+# Index — Crunchyroll Modernizer v3.0.0
 
-## 🎯 Commencez par ici !
+Carte de tous les fichiers du projet.
 
-### Pour démarrer immédiatement (2 min)
-👉 **[DEMARRAGE_RAPIDE.md](DEMARRAGE_RAPIDE.md)** - 3 étapes seulement !
+## Démarrer
 
-### Pour installer correctement (5 min)
-👉 **[INSTALL.md](INSTALL.md)** - Guide détaillé pas à pas
+| Fichier | Pour qui ? | Durée |
+|---|---|---|
+| **[DEMARRAGE_RAPIDE.md](DEMARRAGE_RAPIDE.md)** | Tout le monde | 2 min |
+| **[INSTALL.md](INSTALL.md)** | Installation détaillée + dépannage | 5 min |
+| **[README.md](README.md)** | Vue d'ensemble et architecture | 8 min |
+| **[CHANGELOG.md](CHANGELOG.md)** | Historique des versions | 3 min |
+| **[CUSTOMIZATION.md](CUSTOMIZATION.md)** | Personnalisation avancée | 30 min |
 
-### Pour comprendre le projet (5 min)
-👉 **[README.md](README.md)** - Vue d'ensemble générale
+## Code
 
----
+### Cœur
 
-## 📖 TOUS LES GUIDES
+| Fichier | Rôle |
+|---|---|
+| `manifest.json` | Manifest MV3 : permissions, content scripts, options page, commands. |
+| `background.js` | Service worker : badge, raccourcis Chrome, broadcast. |
+| `content.js` | Script injecté : drapeaux `data-cr-*`, détection de page, hover-killer, motion, agenda, raccourcis lecteur. |
 
-| Guide | Durée | Contenu |
-|-------|-------|---------|
-| **DEMARRAGE_RAPIDE.md** | 2 min | Installation ultra-rapide |
-| **INSTALL.md** | 5 min | Installation détaillée + dépannage |
-| **README.md** | 5 min | Vue d'ensemble + fonctionnalités |
-| **CUSTOMIZATION.md** | 30 min | Guide personnalisation complète |
-| **RESUMÉ_PROJET.md** | 10 min | Résumé complet du projet |
-| **STRUCTURE_COMPLETE.txt** | 5 min | Structure et architecture détaillée |
-| **VERIFICATION.txt** | 2 min | Checklist et vérification |
-| **INDEX.md** | 2 min | Ce fichier |
+### Interface
 
----
+| Fichier | Rôle |
+|---|---|
+| `popup.html` / `popup.js` | Popup compact (toggles + sélecteur de thèmes + slider zoom + export/import). |
+| `options.html` / `options.js` / `options.css` | Page d'options complète à 5 onglets (Apparence, Modules, Lecteur, Avancé, À propos). |
 
-## 💻 FICHIERS DE CODE
+### Styles (15 fichiers, modulaires)
 
-| Fichier | Taille | Description |
-|---------|--------|-------------|
-| **manifest.json** | 698 B | Configuration Chrome |
-| **content.js** | 8.4 KB | Script d'injection (300+ lignes) |
-| **styles.css** | 13 KB | Feuille de styles (550+ lignes) |
-| **popup.html** | 7.3 KB | Interface paramètres (200+ lignes) |
-| **popup.js** | 5.7 KB | Logique popup (150+ lignes) |
-| **icons/icon-128.svg** | 741 B | Icône de l'extension |
+| Fichier | Rôle |
+|---|---|
+| `styles/tokens.css` | Variables de design (couleurs, espacements, durées). |
+| `styles/themes.css` | 5 presets de thèmes + accent perso HSL. |
+| `styles/base.css` | Reset léger, scrollbar, sélection, focus-visible. |
+| `styles/animations.css` | `@keyframes` partagés (rise, fade, shimmer…). |
+| `styles/utilities.css` | Masquage shop / jeux / news. |
+| `styles/interactions.css` | Hover smooth global. |
+| `styles/motion.css` | Transitions de page + reveal au scroll. |
+| `styles/scroll.css` | Barre de progression + bouton « retour en haut ». |
+| `styles/navigation.css` | Barre du haut. |
+| `styles/homepage.css` | Accueil (hero, carrousels, dots). |
+| `styles/cards.css` | Cartes anime (lift Netflix-like). |
+| `styles/clarity.css` | Hiérarchie typo + sub/dub en pilule. |
+| `styles/catalogue.css` | Explorer / filtres. |
+| `styles/anime-detail.css` | Page série / film. |
+| `styles/agenda.css` | Simulcast calendar refondu. |
+| `styles/player.css` | Lecteur vidéo (priorité, ambient, toast clavier). |
 
----
+### Icônes
 
-## 📋 CHECKLIST D'INSTALLATION
+| Fichier | Taille |
+|---|---|
+| `icons/icon-16.png` | 16 × 16 |
+| `icons/icon-48.png` | 48 × 48 |
+| `icons/icon-128.png` | 128 × 128 |
 
-```
-☐ 1. Lire DEMARRAGE_RAPIDE.md (2 min)
-☐ 2. Créer dossier "CrunchyrollModernizer"
-☐ 3. Copier tous les fichiers de code
-☐ 4. Ouvrir chrome://extensions/
-☐ 5. Charger l'extension non empaquetée
-☐ 6. Aller sur crunchyroll.com
-☐ 7. Actualiser avec Ctrl+F5
-☐ 8. Cliquer l'icône orange pour les paramètres
-☐ 9. ✅ C'est prêt !
-```
+> Note : ces trois fichiers sont actuellement la même image source. Les
+> redimensionner aux bonnes dimensions est sur la liste des polish à
+> faire.
 
----
+## Architecture en deux phrases
 
-## 🎨 APERÇU RAPIDE
+1. `chrome.storage.local.settings` est la **source de vérité**.
+   `background.js` (service worker) la maintient et la diffuse.
+2. `content.js` traduit les réglages en attributs `data-cr-*` sur
+   `<html>`. Les CSS sont gardés par ces attributs, donc chaque module
+   est isolé et désactivable indépendamment.
 
-### Installation
-- ⏱️ **2 minutes** : Suivre DEMARRAGE_RAPIDE.md
-- ⚡ **Plug & play** : Aucune compilation
-- 🔧 **Aucune dépendance** : Code standalone
-
-### Utilisation
-- 🖤 **Noir pur** : Fond #000000
-- 🟠 **Orange vif** : Accents #ff6600
-- ✨ **Smooth** : Animations fluides 150-350ms
-- 🚀 **Moderne** : Design ultra-contemporain
-
-### Personnalisation
-- 🎨 **Facile** : Changer les couleurs (5 min)
-- 🎬 **Moyen** : Créer des animations (15 min)
-- 🚀 **Avancé** : Thèmes complets (1h+)
-
----
-
-## 🚀 FLUX RECOMMANDÉ
+## Drapeaux `data-cr-*`
 
 ```
-1️⃣  DEMARRAGE_RAPIDE.md
-     └─→ 3 étapes pour installer (2 min)
+ON/OFF par module :
+  data-cr-enabled              data-cr-modern-nav
+  data-cr-modern-home          data-cr-modern-cards
+  data-cr-modern-browse        data-cr-modern-detail
+  data-cr-modern-player        data-cr-clarity-ui
+  data-cr-bigger-cards         data-cr-minimal-cards
+  data-cr-smooth-hover         data-cr-motion
+  data-cr-scroll-tools         data-cr-ambient
+  data-cr-hide-shop            data-cr-hide-games
+  data-cr-hide-news            data-cr-reduced-motion
+  data-cr-player-hotkeys
 
-2️⃣  Tester sur Crunchyroll.com
-     └─→ Voir le design noir + orange (1 min)
+Choix :
+  data-cr-theme="orange|sakura|mint|neon|mono"
+  data-cr-accent-custom="on"            (override HSL)
 
-3️⃣  README.md
-     └─→ Comprendre ce qu'on a fait (5 min)
-
-4️⃣  (Optionnel) CUSTOMIZATION.md
-     └─→ Personnaliser le design (30 min)
-
-Total minimum : 15 minutes
+État (posé par content.js, lu par les CSS) :
+  data-cr-page="home|player|agenda|browse|detail|account|other"
+  data-cr-pt="enter"                    (transition de page SPA)
+  data-cr-day-focus="1"                 (mode focus jour sur agenda)
+  data-cr-reveal="true|false"           (reveal au scroll)
 ```
 
----
-
-## 📚 GUIDE COMPLET PAR BESOIN
-
-### "Je veux juste l'installer"
-1. DEMARRAGE_RAPIDE.md (2 min)
-2. Tester (2 min)
-3. Fin !
-
-### "Je veux comprendre comment ça marche"
-1. README.md (5 min)
-2. STRUCTURE_COMPLETE.txt (5 min)
-3. Regarder les fichiers de code
-
-### "Je veux personnaliser les couleurs"
-1. CUSTOMIZATION.md → "Modifications rapides" (5 min)
-2. Modifier `styles.css` (2 min)
-3. Tester (2 min)
-
-### "Je veux créer mon propre thème"
-1. CUSTOMIZATION.md complet (30 min)
-2. Créer votre design (1h+)
-3. Partager avec d'autres !
-
-### "Ça ne marche pas"
-1. INSTALL.md → "Dépannage" (5 min)
-2. VERIFICATION.txt → "Checklist" (2 min)
-3. Réinstaller si nécessaire
-
----
-
-## 🎯 STRUCTURE DES FICHIERS
+## Variables CSS exposées
 
 ```
-Pour l'extension (à copier dans un dossier):
-  ✅ manifest.json
-  ✅ content.js
-  ✅ styles.css
-  ✅ popup.html
-  ✅ popup.js
-  ✅ icons/icon-128.svg
-
-Pour la documentation (optionnel mais utile):
-  📖 README.md
-  📖 INSTALL.md
-  📖 CUSTOMIZATION.md
-  📖 Et les autres guides...
+--cr-bg / --cr-bg-elev-{1,2,3}   surfaces
+--cr-text / --cr-text-muted/dim  texte
+--cr-border / --cr-border-strong bordures
+--cr-orange*                     accent (varie selon theme)
+--cr-card-zoom                   zoom des grilles de cartes
+--cr-fast / --cr-mid / --cr-slow durées de transition
+--cr-ease / --cr-ease-out        easings
+--cr-r-{xs,sm,md,lg,xl,pill}     rayons
+--cr-s-{1,2,3,4,5,6,8,10,12}     espacements
 ```
 
----
+## Raccourcis clavier
 
-## 💡 POINTS CLÉS À RETENIR
+### Globaux (Chrome)
 
-✅ **Installation** : 3 étapes en 2 minutes
-✅ **Design** : Noir pur + orange (#ff6600)
-✅ **Animations** : Smooth 150-350ms partout
-✅ **Sécurité** : 100% local, pas de données envoyées
-✅ **Compatibilité** : Chrome 88+
-✅ **Personnalisation** : Facile via CUSTOMIZATION.md
-✅ **Support** : 5 guides détaillés
-✅ **Prêt** : Production ready !
+| Raccourci | Action |
+|---|---|
+| `Alt+Shift+C` | Ouvrir le popup |
+| `Alt+Shift+O` | Ouvrir la page d'options |
+| (à configurer) | Activer / désactiver l'extension |
+| (à configurer) | Cycler les thèmes |
 
----
+Configurables sur `chrome://extensions/shortcuts`.
 
-## 📞 AIDE RAPIDE
+### Page lecteur
 
-| Problème | Solution |
-|----------|----------|
-| Comment installer ? | DEMARRAGE_RAPIDE.md |
-| Installation détaillée ? | INSTALL.md |
-| Ça ne marche pas ? | INSTALL.md + VERIFICATION.txt |
-| Comment personnaliser ? | CUSTOMIZATION.md |
-| Je veux comprendre ? | README.md |
-| Structure des fichiers ? | STRUCTURE_COMPLETE.txt |
+Voir [`README.md#raccourcis-clavier-page-lecteur`](README.md#raccourcis-clavier-page-lecteur).
 
----
+## Confidentialité
 
-## 🔍 TABLE DES MATIÈRES DÉTAILLÉE
+- 100 % local, aucune donnée envoyée.
+- Permissions : `storage` + `https://www.crunchyroll.com/*`.
+- Pas de tracker, pas d'analytics, pas de fetch externe.
 
-### DEMARRAGE_RAPIDE.md
-- 3 étapes d'installation
-- Ce que vous verrez
-- Guide paramètres
-- Dépannage simple
+## Liens utiles
 
-### INSTALL.md
-- Prérequis
-- Installation complète
-- Vérification
-- Dépannage détaillé
-- Checklist
-
-### README.md
-- Description générale
-- Fonctionnalités
-- Architecture
-- Design system
-- Roadmap
-
-### CUSTOMIZATION.md
-- Modifications rapides (5 min)
-- Modifications moyennes (15 min)
-- Modifications avancées (1h+)
-- Créer des thèmes
-- Ressources utiles
-
-### RESUMÉ_PROJET.md
-- Qu'est-ce que c'est
-- Fichiers fournis
-- Installation rapide
-- Architecture technique
-- Statistiques
-
-### STRUCTURE_COMPLETE.txt
-- Arborescence complète
-- Contenu détaillé des fichiers
-- Palette de couleurs
-- Fonctionnalités
-- Guides disponibles
-
-### VERIFICATION.txt
-- Checklist installation
-- Checklist vérification
-- Dépannage rapide
-- Status final
-
----
-
-## 🎬 PRÊT À COMMENCER ?
-
-### Option 1 : Démarrage ultra-rapide
-👉 Ouvrir **DEMARRAGE_RAPIDE.md** maintenant !
-
-### Option 2 : Approche détaillée
-👉 Ouvrir **INSTALL.md** pour une installation complète
-
-### Option 3 : Comprendre d'abord
-👉 Ouvrir **README.md** pour la vue générale
-
----
-
-## ✨ EN RÉSUMÉ
-
-🎨 Une extension Chrome moderne
-🖤 Design noir pur + orange
-⚡ Installation en 2 minutes
-🚀 Prête à l'emploi
-📚 Documentée complètement
-🔧 Personnalisable
-🔒 100% sécurisée
-
----
-
-**Version** : 1.0.0
-**Statut** : Production Ready ✓
-**Support** : Chrome 88+ ✓
-**Sécurité** : 100% Safe ✓
-
-Bon visionnage ! 🎬✨
+- Configurer les raccourcis Chrome : `chrome://extensions/shortcuts`
+- Page d'extensions : `chrome://extensions/`
+- Voir les logs du service worker : `chrome://extensions` →
+  Crunchyroll Modernizer → « Inspecter les vues : service worker ».

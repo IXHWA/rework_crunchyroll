@@ -352,10 +352,45 @@ html[data-cr-ambient="on"][data-cr-page="player"] body::before {
   position: fixed;
   inset: -10vmax;
   background:
-    radial-gradient(800px 500px at 30% 30%, rgba(255, 122, 26, 0.10), transparent 60%),
+    radial-gradient(800px 500px at 30% 30%, var(--cr-orange-tint), transparent 60%),
     radial-gradient(700px 480px at 70% 70%, rgba(120, 60, 220, 0.08), transparent 60%);
   filter: blur(60px);
   pointer-events: none;
   z-index: 0;
   animation: cr-fade-in var(--cr-cinem) var(--cr-ease-out) both;
+}
+
+/* ---------------------------------------------------------------------
+   TOAST RACCOURCIS CLAVIER (injecté par content.js)
+   --------------------------------------------------------------------- */
+
+#cr-hotkey-toast {
+  position: fixed;
+  top: 24px;
+  left: 50%;
+  transform: translate(-50%, -10px);
+  background: rgba(8, 8, 12, 0.86);
+  color: var(--cr-text);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  padding: 10px 18px;
+  border-radius: var(--cr-r-pill);
+  border: 1px solid var(--cr-border-strong);
+  box-shadow: var(--cr-shadow-md), 0 0 24px var(--cr-orange-glow);
+  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  pointer-events: none;
+  opacity: 0;
+  z-index: 99999;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  transition:
+    opacity var(--cr-fast) var(--cr-ease-out),
+    transform var(--cr-mid) var(--cr-ease-out);
+}
+
+#cr-hotkey-toast.cr-show {
+  opacity: 1;
+  transform: translate(-50%, 0);
 }

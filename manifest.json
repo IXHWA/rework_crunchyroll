@@ -1,16 +1,20 @@
 {
   "manifest_version": 3,
   "name": "Crunchyroll Modernizer",
-  "version": "2.6.1",
-  "description": "Refonte premium et cinématique de Crunchyroll : lecteur immersif, accueil épuré, animations soignées.",
+  "version": "3.0.0",
+  "description": "Refonte premium et cinématique de Crunchyroll : thèmes, lecteur immersif, raccourcis clavier, accueil épuré, animations soignées.",
   "permissions": ["storage"],
   "host_permissions": ["https://www.crunchyroll.com/*"],
+  "background": {
+    "service_worker": "background.js"
+  },
   "content_scripts": [
     {
       "matches": ["https://www.crunchyroll.com/*"],
       "js": ["content.js"],
       "css": [
         "styles/tokens.css",
+        "styles/themes.css",
         "styles/base.css",
         "styles/animations.css",
         "styles/utilities.css",
@@ -33,6 +37,28 @@
   "action": {
     "default_popup": "popup.html",
     "default_title": "Crunchyroll Modernizer"
+  },
+  "options_page": "options.html",
+  "commands": {
+    "_execute_action": {
+      "suggested_key": {
+        "default": "Alt+Shift+C",
+        "mac": "Alt+Shift+C"
+      }
+    },
+    "open-options": {
+      "suggested_key": {
+        "default": "Alt+Shift+O",
+        "mac": "Alt+Shift+O"
+      },
+      "description": "Ouvrir la page d'options complète"
+    },
+    "toggle-extension": {
+      "description": "Activer / désactiver l'extension"
+    },
+    "cycle-theme": {
+      "description": "Changer de thème (cycle)"
+    }
   },
   "icons": {
     "16": "icons/icon-16.png",

@@ -9,16 +9,19 @@
       --bg: #050506;
       --bg-1: #0c0c0e;
       --bg-2: #14151a;
+      --bg-3: #1c1d23;
       --border: rgba(255,255,255,0.08);
       --border-strong: rgba(255,255,255,0.16);
       --text: #f4f4f5;
       --muted: #a1a1aa;
-      --orange: #ff7a1a;
-      --orange-soft: #ff9a4d;
-      --orange-deep: #d65500;
-      --glow: rgba(255,122,26,0.32);
+      --dim: #71717a;
+      --accent: var(--accent-color, #ff7a1a);
+      --accent-soft: var(--accent-color-soft, #ff9a4d);
+      --accent-deep: var(--accent-color-deep, #d65500);
+      --glow: var(--accent-glow, rgba(255,122,26,0.32));
       --r-sm: 10px;
       --r-md: 14px;
+      --r-lg: 18px;
       --r-pill: 999px;
       --ease: cubic-bezier(0.16, 1, 0.30, 1);
     }
@@ -27,39 +30,47 @@
 
     html, body {
       margin: 0; padding: 0;
-      width: 360px;
+      width: 380px;
       background: var(--bg);
       color: var(--text);
       font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       -webkit-font-smoothing: antialiased;
+      max-height: 600px;
+      overflow-y: auto;
     }
+
+    body::-webkit-scrollbar { width: 6px; }
+    body::-webkit-scrollbar-track { background: transparent; }
+    body::-webkit-scrollbar-thumb { background: var(--bg-3); border-radius: 3px; }
 
     .header {
       padding: 18px 20px 14px;
       border-bottom: 1px solid var(--border);
       background:
-        radial-gradient(160px 100px at 12% 0%, rgba(255,122,26,0.18), transparent 70%),
+        radial-gradient(160px 100px at 12% 0%, var(--glow), transparent 70%),
         linear-gradient(180deg, #0a0a0c, #050506);
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      backdrop-filter: blur(8px);
     }
 
-    .brand {
-      display: flex; align-items: center; gap: 10px;
-    }
+    .brand { display: flex; align-items: center; gap: 10px; }
     .brand .dot {
       width: 10px; height: 10px; border-radius: 50%;
-      background: linear-gradient(135deg, var(--orange), var(--orange-deep));
+      background: linear-gradient(135deg, var(--accent), var(--accent-deep));
       box-shadow: 0 0 14px var(--glow);
     }
-    .brand h1 {
-      margin: 0; font-size: 15px; font-weight: 700; letter-spacing: -0.01em;
-    }
+    .brand h1 { margin: 0; font-size: 15px; font-weight: 700; letter-spacing: -0.01em; }
     .brand .v {
       margin-left: auto; font-size: 11px; color: var(--muted);
       font-variant-numeric: tabular-nums;
+      padding: 2px 8px;
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: var(--r-pill);
     }
-    .subtitle {
-      margin: 4px 0 0 20px; font-size: 12px; color: var(--muted);
-    }
+    .subtitle { margin: 4px 0 0 20px; font-size: 12px; color: var(--muted); }
 
     .content { padding: 14px; }
 
@@ -72,12 +83,21 @@
     }
 
     .section-title {
-      padding: 8px 10px 4px;
-      font-size: 11px;
-      letter-spacing: 0.08em;
+      padding: 10px 10px 6px;
+      font-size: 10.5px;
+      letter-spacing: 0.10em;
       text-transform: uppercase;
       color: var(--muted);
-      font-weight: 600;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .section-title::before {
+      content: "";
+      width: 4px; height: 4px; border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 6px var(--glow);
     }
 
     .row {
@@ -90,17 +110,11 @@
     }
     .row:hover { background: rgba(255,255,255,0.04); }
 
-    .row .label {
-      flex: 1;
-      display: flex; flex-direction: column; gap: 2px;
-    }
-    .row .label .name {
-      font-size: 13px; font-weight: 500;
-    }
-    .row .label .desc {
-      font-size: 11px; color: var(--muted); line-height: 1.35;
-    }
+    .row .label { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+    .row .label .name { font-size: 13px; font-weight: 500; }
+    .row .label .desc { font-size: 11px; color: var(--muted); line-height: 1.35; }
 
+    /* ----- Switch ----- */
     .switch {
       position: relative;
       flex: 0 0 auto;
@@ -121,17 +135,93 @@
       box-shadow: 0 2px 6px rgba(0,0,0,0.4);
     }
     .switch[aria-checked="true"] {
-      background: var(--orange);
-      border-color: var(--orange);
-      box-shadow: 0 0 0 4px rgba(255,122,26,0.12);
+      background: var(--accent);
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px var(--glow);
     }
-    .switch[aria-checked="true"]::after {
-      transform: translateX(16px);
+    .switch[aria-checked="true"]::after { transform: translateX(16px); }
+
+    /* ----- Thèmes ----- */
+    .themes {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      padding: 10px;
+    }
+    .theme-chip {
+      aspect-ratio: 1;
+      border-radius: var(--r-sm);
+      cursor: pointer;
+      position: relative;
+      border: 2px solid transparent;
+      transition: transform 180ms var(--ease), border-color 180ms var(--ease);
+      overflow: hidden;
+    }
+    .theme-chip:hover { transform: translateY(-2px); }
+    .theme-chip[data-active="true"] {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--glow);
+    }
+    .theme-chip span {
+      position: absolute;
+      bottom: 4px; left: 0; right: 0;
+      text-align: center;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.85);
+      text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+    }
+    .theme-chip[data-theme="orange"] { background: linear-gradient(135deg, #ff7a1a, #d65500 70%, #1a1a1a); }
+    .theme-chip[data-theme="sakura"] { background: linear-gradient(135deg, #ff5d8f, #c43673 70%, #1a1a1a); }
+    .theme-chip[data-theme="mint"]   { background: linear-gradient(135deg, #2cd9b8, #1aa790 70%, #1a1a1a); }
+    .theme-chip[data-theme="neon"]   { background: linear-gradient(135deg, #b16dff, #7c3df0 70%, #1a1a1a); }
+    .theme-chip[data-theme="mono"]   { background: linear-gradient(135deg, #e4e4e7, #71717a 70%, #1a1a1a); }
+
+    /* ----- Slider ----- */
+    .slider-row {
+      padding: 8px 12px 12px;
+    }
+    .slider-row .label { display: flex; justify-content: space-between; margin-bottom: 6px; }
+    .slider-row .label .name { font-size: 13px; font-weight: 500; }
+    .slider-row .label .value {
+      font-size: 12px;
+      color: var(--accent);
+      font-variant-numeric: tabular-nums;
+      font-weight: 600;
+    }
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 4px;
+      border-radius: 2px;
+      background: var(--bg-3);
+      outline: none;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px; height: 16px;
+      border-radius: 50%;
+      background: var(--accent);
+      cursor: pointer;
+      box-shadow: 0 0 0 4px var(--glow);
+      transition: transform 120ms var(--ease);
+    }
+    input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.18); }
+    input[type="range"]::-moz-range-thumb {
+      width: 16px; height: 16px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 0 0 4px var(--glow);
     }
 
-    .actions {
-      display: flex; gap: 8px; margin-top: 4px;
-    }
+    /* ----- Boutons ----- */
+    .actions { display: flex; gap: 8px; margin-top: 4px; }
     button {
       flex: 1;
       font-family: inherit;
@@ -146,14 +236,23 @@
     }
     button:hover { border-color: var(--border-strong); background: rgba(255,255,255,0.06); }
     button.primary {
-      background: linear-gradient(135deg, var(--orange) 0%, var(--orange-deep) 100%);
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-deep) 100%);
       border-color: transparent;
       color: #000;
       box-shadow: 0 8px 24px var(--glow);
     }
-    button.primary:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 12px 32px var(--glow);
+    button.primary:hover { transform: translateY(-1px); box-shadow: 0 12px 32px var(--glow); }
+    button.ghost { background: transparent; }
+
+    .link-row {
+      display: flex;
+      gap: 8px;
+      padding: 4px 0;
+    }
+    .link-row button {
+      font-size: 11px;
+      font-weight: 500;
+      padding: 8px 10px;
     }
 
     .status {
@@ -164,7 +263,7 @@
       min-height: 16px;
       transition: color 160ms var(--ease);
     }
-    .status.ok { color: #4ade80; }
+    .status.ok  { color: #4ade80; }
     .status.err { color: #ef4444; }
 
     .footer {
@@ -174,6 +273,10 @@
       color: rgba(255,255,255,0.35);
       text-align: center;
     }
+    .footer a { color: var(--accent-soft); text-decoration: none; }
+
+    /* Hide internal file input for import */
+    #importFile { display: none; }
   </style>
 </head>
 <body>
@@ -181,18 +284,43 @@
     <div class="brand">
       <span class="dot"></span>
       <h1>Crunchyroll Modernizer</h1>
-      <span class="v" id="version">v2.6.1</span>
+      <span class="v" id="version">v3.0.0</span>
     </div>
     <p class="subtitle">Une expérience cinématique, fluide et premium.</p>
   </header>
 
   <main class="content">
+    <!-- ====================================================== -->
+    <!--  THÈMES                                                -->
+    <!-- ====================================================== -->
+    <section class="section">
+      <div class="section-title">Thème</div>
+      <div class="themes" id="themes">
+        <div class="theme-chip" data-theme="orange"><span>Orange</span></div>
+        <div class="theme-chip" data-theme="sakura"><span>Sakura</span></div>
+        <div class="theme-chip" data-theme="mint"><span>Mint</span></div>
+        <div class="theme-chip" data-theme="neon"><span>Neon</span></div>
+        <div class="theme-chip" data-theme="mono"><span>Mono</span></div>
+      </div>
+
+      <div class="slider-row">
+        <div class="label">
+          <span class="name">Zoom des cartes</span>
+          <span class="value" id="zoomValue">×1.18</span>
+        </div>
+        <input type="range" id="zoom" min="100" max="140" step="2" value="118" />
+      </div>
+    </section>
+
+    <!-- ====================================================== -->
+    <!--  GLOBAL                                                -->
+    <!-- ====================================================== -->
     <section class="section">
       <div class="section-title">Global</div>
       <div class="row" data-key="enabled">
         <div class="label">
-          <span class="name">Activer l’extension</span>
-          <span class="desc">Désactive tous les modules d’un coup.</span>
+          <span class="name">Activer l'extension</span>
+          <span class="desc">Désactive tous les modules d'un coup.</span>
         </div>
         <div class="switch" role="switch" aria-checked="true"></div>
       </div>
@@ -247,12 +375,22 @@
       </div>
     </section>
 
+    <!-- ====================================================== -->
+    <!--  MODULES                                                -->
+    <!-- ====================================================== -->
     <section class="section">
       <div class="section-title">Modules</div>
       <div class="row" data-key="modernPlayer">
         <div class="label">
           <span class="name">Lecteur premium</span>
           <span class="desc">Contrôles, progression, sous-titres affinés.</span>
+        </div>
+        <div class="switch" role="switch" aria-checked="true"></div>
+      </div>
+      <div class="row" data-key="playerHotkeys">
+        <div class="label">
+          <span class="name">Raccourcis clavier lecteur</span>
+          <span class="desc">J/K/L, F, M, N, 0–9, ←→. Voir les options pour la liste.</span>
         </div>
         <div class="switch" role="switch" aria-checked="true"></div>
       </div>
@@ -273,7 +411,7 @@
       <div class="row" data-key="modernCards">
         <div class="label">
           <span class="name">Cartes anime</span>
-          <span class="desc">Survol smooth : l’image rétrécit et l’ombre orange apparaît.</span>
+          <span class="desc">Survol smooth : image rétrécie et ombre d'accent.</span>
         </div>
         <div class="switch" role="switch" aria-checked="true"></div>
       </div>
@@ -287,14 +425,14 @@
       <div class="row" data-key="minimalCards">
         <div class="label">
           <span class="name">Mode minimal</span>
-          <span class="desc">Masque notes, synopsis longs et le hover étendu d’origine.</span>
+          <span class="desc">Masque notes, synopsis longs et le hover étendu d'origine.</span>
         </div>
         <div class="switch" role="switch" aria-checked="true"></div>
       </div>
       <div class="row" data-key="clarityUI">
         <div class="label">
           <span class="name">Interface lisible</span>
-          <span class="desc">Titre fort, sub/dub en pilule sur l’image, infos « Reprendre » au survol.</span>
+          <span class="desc">Titre fort, sub/dub en pilule, infos « Reprendre » au survol.</span>
         </div>
         <div class="switch" role="switch" aria-checked="true"></div>
       </div>
@@ -315,22 +453,29 @@
       <div class="row" data-key="modernNav">
         <div class="label">
           <span class="name">Barre du haut</span>
-          <span class="desc">Sticky, blur et hover orange.</span>
+          <span class="desc">Sticky, blur et hover d'accent.</span>
         </div>
         <div class="switch" role="switch" aria-checked="true"></div>
       </div>
     </section>
 
     <div class="actions">
-      <button id="reset">Réinitialiser</button>
-      <button class="primary" id="reload">Recharger l’onglet</button>
+      <button id="reset" class="ghost">Réinitialiser</button>
+      <button class="primary" id="reload">Recharger l'onglet</button>
+    </div>
+
+    <div class="link-row">
+      <button id="openOptions" class="ghost">⚙ Options complètes</button>
+      <button id="exportSettings" class="ghost">↗ Exporter</button>
+      <button id="importBtn" class="ghost">↙ Importer</button>
+      <input type="file" id="importFile" accept="application/json" />
     </div>
 
     <div class="status" id="status"></div>
   </main>
 
   <footer class="footer">
-    Aucune donnée n’est envoyée à l’extérieur.
+    Aucune donnée n'est envoyée à l'extérieur · v3.0.0
   </footer>
 
   <script src="popup.js"></script>

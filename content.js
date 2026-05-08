@@ -106,6 +106,11 @@
     modernPlayer:   true,   // lecteur (priorité)
     ambient:        false,  // halo ambient mode
     reducedMotion:  false,  // forcer mouvement réduit
+    /* v3.0.0 */
+    theme:          "orange",   // orange | sakura | mint | neon | mono
+    accentHue:      null,       // [h, s, l] OU null (override personnalisé)
+    cardZoom:       1.18,       // 1.00 → 1.40
+    playerHotkeys:  true,       // raccourcis sur la page lecteur
   };
 
   const FLAG_MAP = {
@@ -127,13 +132,43 @@
     modernPlayer:  "data-cr-modern-player",
     ambient:       "data-cr-ambient",
     reducedMotion: "data-cr-reduced-motion",
+    playerHotkeys: "data-cr-player-hotkeys",
   };
+
+  const VALID_THEMES = ["orange", "sakura", "mint", "neon", "mono"];
 
   function applySettings(settings) {
     const merged = Object.assign({}, DEFAULT_SETTINGS, settings || {});
     for (const key in FLAG_MAP) {
       html.setAttribute(FLAG_MAP[key], merged[key] ? "on" : "off");
     }
+
+    /* Thème */
+    const theme = VALID_THEMES.includes(merged.theme) ? merged.theme : "orange";
+    html.setAttribute("data-cr-theme", theme);
+
+    /* Accent perso (HSL) */
+    if (Array.isArray(merged.accentHue) && merged.accentHue.length === 3) {
+      const [h, s, l] = merged.accentHue;
+      html.style.setProperty("--cr-accent-h", String(h));
+      html.style.setProperty("--cr-accent-s", String(s) + "%");
+      html.style.setProperty("--cr-accent-l", String(l) + "%");
+      html.setAttribute("data-cr-accent-custom", "on");
+    } else {
+      html.style.removeProperty("--cr-accent-h");
+      html.style.removeProperty("--cr-accent-s");
+      html.style.removeProperty("--cr-accent-l");
+      html.removeAttribute("data-cr-accent-custom");
+    }
+
+    /* Zoom des cartes */
+    const z = Number(merged.cardZoom);
+    if (!Number.isFinite(z) || z < 1 || z > 1.6) {
+      html.style.removeProperty("--cr-card-zoom");
+    } else {
+      html.style.setProperty("--cr-card-zoom", String(z));
+    }
+
     if (merged.reducedMotion) {
       html.style.setProperty("--cr-fast", "0ms");
       html.style.setProperty("--cr-mid",  "0ms");
@@ -960,4 +995,235 @@
     }
     if (++agendaTries > 20) clearInterval(agendaPoll);
   }, 700);
+
+  /* =================================================================== */
+  /*  RACCOURCIS CLAVIER LECTEUR (data-cr-player-hotkeys="on")           */
+  /*                                                                      */
+  /*  Contrat :                                                           */
+  /*   - actifs uniquement sur la page lecteur (data-cr-page="player")   */
+  /*   - on ignore quand le focus est dans un input/textarea/editable    */
+  /*   - on n'écrase pas les raccourcis natifs Crunchyroll : on agit     */
+  /*     directement sur l'élément <video>, ou on clique des boutons     */
+  /*     précis (next-episode, prev-episode).                             */
+  /*                                                                      */
+  /*  Touches :                                                           */
+  /*   K / Espace      → play/pause                                       */
+  /*   J / ←           → -10 s                                            */
+  /*   L / →           → +10 s                                            */
+  /*   ↑ / ↓           → volume +/- 10 %                                  */
+  /*   M               → mute                                             */
+  /*   F               → plein écran                                      */
+  /*   T               → mode théâtre / large (best-effort)               */
+  /*   N               → épisode suivant                                  */
+  /*   P               → épisode précédent                                */
+  /*   0..9            → seek 0%..90%                                     */
+  /*   < / >           → vitesse -/+ 0.25                                 */
+  /*   I               → afficher le toast info (titre, vitesse)         */
+  /* =================================================================== */
+
+  const HOTKEY_TOAST_ID = "cr-hotkey-toast";
+
+  function isEditableTarget(t) {
+    if (!t) return false;
+    const tag = (t.tagName || "").toLowerCase();
+    if (tag === "input" || tag === "textarea" || tag === "select") return true;
+    if (t.isContentEditable) return true;
+    return false;
+  }
+
+  function getVideo() {
+    /* Crunchyroll utilise plusieurs racines (vilos / velocity).
+       On prend la 1re <video> visible ; si plusieurs, la plus grande. */
+    const vids = [...document.querySelectorAll("video")].filter((v) => {
+      if (!v.isConnected) return false;
+      const r = v.getBoundingClientRect();
+      return r.width > 0 && r.height > 0;
+    });
+    if (!vids.length) return null;
+    vids.sort((a, b) => {
+      const ra = a.getBoundingClientRect(), rb = b.getBoundingClientRect();
+      return rb.width * rb.height - ra.width * ra.height;
+    });
+    return vids[0];
+  }
+
+  function ensureToast() {
+    let el = document.getElementById(HOTKEY_TOAST_ID);
+    if (el) return el;
+    el = document.createElement("div");
+    el.id = HOTKEY_TOAST_ID;
+    el.setAttribute("aria-live", "polite");
+    document.body && document.body.appendChild(el);
+    return el;
+  }
+
+  let toastTimer = 0;
+  function toast(msg) {
+    const el = ensureToast();
+    if (!el) return;
+    el.textContent = msg;
+    el.classList.add("cr-show");
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove("cr-show"), 1400);
+  }
+
+  function clamp(n, lo, hi) { return Math.max(lo, Math.min(hi, n)); }
+
+  function clickButtonByLabel(re) {
+    const buttons = document.querySelectorAll(
+      'button, [role="button"], a[role="button"]'
+    );
+    for (const b of buttons) {
+      const txt = (b.getAttribute("aria-label") || b.textContent || "").trim();
+      if (re.test(txt)) {
+        b.click();
+        return true;
+      }
+    }
+    return false;
+  }
+
+  function nextEpisode() {
+    /* Crunchyroll expose un bouton « Next Episode » / « Up Next » */
+    if (clickButtonByLabel(/up\s*next|next\s*episode|épisode\s*suivant|suivant/i)) return true;
+    /* Fallback : déclencher un keydown N natif */
+    document.dispatchEvent(new KeyboardEvent("keydown", { key: "n", code: "KeyN", bubbles: true }));
+    return false;
+  }
+  function prevEpisode() {
+    if (clickButtonByLabel(/previous\s*episode|épisode\s*précédent|précédent/i)) return true;
+    document.dispatchEvent(new KeyboardEvent("keydown", { key: "p", code: "KeyP", bubbles: true }));
+    return false;
+  }
+
+  function toggleFullscreen() {
+    const v = getVideo();
+    const target = v ? (v.closest('[class*="player-wrapper"], [class*="vilos"], [class*="velocity-player"]') || v) : null;
+    if (document.fullscreenElement) {
+      document.exitFullscreen?.();
+    } else if (target?.requestFullscreen) {
+      target.requestFullscreen().catch(() => {});
+    }
+  }
+
+  function fmtTime(sec) {
+    if (!Number.isFinite(sec)) return "--:--";
+    sec = Math.max(0, Math.floor(sec));
+    const m = Math.floor(sec / 60);
+    const s = sec % 60;
+    if (m >= 60) {
+      const h = Math.floor(m / 60);
+      const mm = m % 60;
+      return `${h}:${String(mm).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+    }
+    return `${m}:${String(s).padStart(2, "0")}`;
+  }
+
+  function onPlayerKey(e) {
+    if (html.getAttribute("data-cr-player-hotkeys") !== "on") return;
+    if (html.getAttribute(FLAG_PAGE) !== "player") return;
+    if (isEditableTarget(e.target)) return;
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+
+    const v = getVideo();
+
+    /* Touches actives même sans <video> (next/prev episode) */
+    if (e.key === "n" || e.key === "N") {
+      e.preventDefault();
+      nextEpisode();
+      toast("Épisode suivant");
+      return;
+    }
+    if (e.key === "p" || e.key === "P") {
+      e.preventDefault();
+      prevEpisode();
+      toast("Épisode précédent");
+      return;
+    }
+    if (e.key === "f" || e.key === "F") {
+      e.preventDefault();
+      toggleFullscreen();
+      return;
+    }
+
+    if (!v) return;
+
+    switch (e.key) {
+      case " ":
+      case "k":
+      case "K":
+        e.preventDefault();
+        if (v.paused) { v.play().catch(() => {}); toast("▶ Lecture"); }
+        else { v.pause(); toast("⏸ Pause"); }
+        break;
+
+      case "j":
+      case "J":
+      case "ArrowLeft":
+        e.preventDefault();
+        v.currentTime = Math.max(0, v.currentTime - 10);
+        toast("◀ -10 s · " + fmtTime(v.currentTime));
+        break;
+
+      case "l":
+      case "L":
+      case "ArrowRight":
+        e.preventDefault();
+        v.currentTime = Math.min(v.duration || Infinity, v.currentTime + 10);
+        toast("▶ +10 s · " + fmtTime(v.currentTime));
+        break;
+
+      case "ArrowUp":
+        e.preventDefault();
+        v.volume = clamp(v.volume + 0.1, 0, 1);
+        v.muted = false;
+        toast("🔊 " + Math.round(v.volume * 100) + "%");
+        break;
+
+      case "ArrowDown":
+        e.preventDefault();
+        v.volume = clamp(v.volume - 0.1, 0, 1);
+        toast("🔉 " + Math.round(v.volume * 100) + "%");
+        break;
+
+      case "m":
+      case "M":
+        e.preventDefault();
+        v.muted = !v.muted;
+        toast(v.muted ? "🔇 Muet" : "🔊 Son rétabli");
+        break;
+
+      case "<":
+      case ",":
+        e.preventDefault();
+        v.playbackRate = clamp(Math.round((v.playbackRate - 0.25) * 100) / 100, 0.25, 3);
+        toast("Vitesse ×" + v.playbackRate.toFixed(2));
+        break;
+
+      case ">":
+      case ".":
+        e.preventDefault();
+        v.playbackRate = clamp(Math.round((v.playbackRate + 0.25) * 100) / 100, 0.25, 3);
+        toast("Vitesse ×" + v.playbackRate.toFixed(2));
+        break;
+
+      case "i":
+      case "I":
+        e.preventDefault();
+        toast(`${fmtTime(v.currentTime)} / ${fmtTime(v.duration)} · ×${v.playbackRate.toFixed(2)}`);
+        break;
+
+      default:
+        if (/^[0-9]$/.test(e.key) && Number.isFinite(v.duration)) {
+          e.preventDefault();
+          const ratio = Number(e.key) / 10;
+          v.currentTime = v.duration * ratio;
+          toast(`Saut ${e.key * 10}% · ` + fmtTime(v.currentTime));
+        }
+        break;
+    }
+  }
+
+  /* Capture phase pour préempter d'éventuels handlers natifs */
+  document.addEventListener("keydown", onPlayerKey, true);
 })();

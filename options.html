@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Crunchyroll Modernizer — Options</title>
+  <link rel="stylesheet" href="options.css" />
+</head>
+<body>
+  <div class="background" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="dot"></span>
+      <h1>Crunchyroll Modernizer</h1>
+      <span class="version" id="version">v3.0.0</span>
+    </div>
+    <p class="tagline">Configure ton expérience Crunchyroll, pixel par pixel.</p>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button class="tab" role="tab" data-tab="appearance" aria-selected="true">Apparence</button>
+    <button class="tab" role="tab" data-tab="modules">Modules</button>
+    <button class="tab" role="tab" data-tab="player">Lecteur</button>
+    <button class="tab" role="tab" data-tab="advanced">Avancé</button>
+    <button class="tab" role="tab" data-tab="about">À propos</button>
+  </nav>
+
+  <main class="page">
+    <!-- ============================================================ -->
+    <!--  APPARENCE                                                   -->
+    <!-- ============================================================ -->
+    <section class="panel" data-panel="appearance" data-active="true">
+      <div class="card">
+        <h2>Thème de couleurs</h2>
+        <p class="muted">Choisis l'identité visuelle de l'extension. Tous les modules s'adaptent automatiquement.</p>
+
+        <div class="theme-grid" id="themes">
+          <button class="theme-card" data-theme="orange">
+            <div class="preview preview-orange"></div>
+            <div class="name">Orange</div>
+            <div class="desc">Esprit Crunchyroll original</div>
+          </button>
+          <button class="theme-card" data-theme="sakura">
+            <div class="preview preview-sakura"></div>
+            <div class="name">Sakura</div>
+            <div class="desc">Rose poudré, doux et chaud</div>
+          </button>
+          <button class="theme-card" data-theme="mint">
+            <div class="preview preview-mint"></div>
+            <div class="name">Mint</div>
+            <div class="desc">Turquoise frais et apaisant</div>
+          </button>
+          <button class="theme-card" data-theme="neon">
+            <div class="preview preview-neon"></div>
+            <div class="name">Neon</div>
+            <div class="desc">Violet électrique cyberpunk</div>
+          </button>
+          <button class="theme-card" data-theme="mono">
+            <div class="preview preview-mono"></div>
+            <div class="name">Mono</div>
+            <div class="desc">Ultra discret, gris perle</div>
+          </button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Couleur d'accent personnalisée</h2>
+        <p class="muted">Active pour utiliser ta propre teinte (HSL). Cela écrase le thème ci-dessus pour ce qui est de l'accent.</p>
+
+        <div class="row">
+          <div class="row-label">
+            <strong>Activer l'accent personnalisé</strong>
+            <span class="muted small">Quand actif, les sliders ci-dessous prennent le relais.</span>
+          </div>
+          <div class="switch" id="customAccentToggle" role="switch" aria-checked="false"></div>
+        </div>
+
+        <div class="hsl-grid" id="hslGroup">
+          <div class="hsl">
+            <label>Teinte (Hue) <span class="muted" id="hueValue">22°</span></label>
+            <input type="range" id="hue" min="0" max="360" value="22" />
+            <div class="hue-track" aria-hidden="true"></div>
+          </div>
+          <div class="hsl">
+            <label>Saturation <span class="muted" id="satValue">100%</span></label>
+            <input type="range" id="sat" min="20" max="100" value="100" />
+          </div>
+          <div class="hsl">
+            <label>Luminosité <span class="muted" id="lightValue">55%</span></label>
+            <input type="range" id="light" min="30" max="75" value="55" />
+          </div>
+          <div class="swatch" id="swatch" aria-hidden="true"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Densité & taille</h2>
+
+        <div class="slider-row">
+          <div class="row-label">
+            <strong>Zoom des cartes</strong>
+            <span class="muted small">100 % = taille Crunchyroll d'origine. 140 % = vignettes XL.</span>
+          </div>
+          <div class="slider-line">
+            <input type="range" id="zoom" min="100" max="140" step="2" value="118" />
+            <span class="value" id="zoomValue">×1.18</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!--  MODULES                                                     -->
+    <!-- ============================================================ -->
+    <section class="panel" data-panel="modules">
+      <div class="card">
+        <h2>Modules visuels</h2>
+        <p class="muted">Active uniquement les pages que tu veux modifier.</p>
+
+        <div class="toggle-list" id="modulesList">
+          <!-- généré par options.js -->
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Catégories à masquer</h2>
+        <p class="muted">Les URLs directes restent toujours accessibles.</p>
+
+        <div class="toggle-list" id="hideList">
+          <!-- généré par options.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!--  LECTEUR                                                     -->
+    <!-- ============================================================ -->
+    <section class="panel" data-panel="player">
+      <div class="card">
+        <h2>Lecteur vidéo</h2>
+
+        <div class="toggle-list" id="playerList">
+          <!-- généré par options.js -->
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Raccourcis clavier (page lecteur)</h2>
+        <p class="muted">Ces raccourcis fonctionnent quand l'option « Raccourcis clavier lecteur » est activée et que le focus n'est pas dans un champ texte.</p>
+
+        <div class="kbd-grid">
+          <div class="kbd-row"><kbd>K</kbd> <kbd>Espace</kbd> <span>Lecture / pause</span></div>
+          <div class="kbd-row"><kbd>J</kbd> <kbd>←</kbd>      <span>Reculer 10 s</span></div>
+          <div class="kbd-row"><kbd>L</kbd> <kbd>→</kbd>      <span>Avancer 10 s</span></div>
+          <div class="kbd-row"><kbd>↑</kbd> <kbd>↓</kbd>      <span>Volume ± 10 %</span></div>
+          <div class="kbd-row"><kbd>M</kbd>                   <span>Couper le son</span></div>
+          <div class="kbd-row"><kbd>F</kbd>                   <span>Plein écran</span></div>
+          <div class="kbd-row"><kbd>N</kbd>                   <span>Épisode suivant</span></div>
+          <div class="kbd-row"><kbd>P</kbd>                   <span>Épisode précédent</span></div>
+          <div class="kbd-row"><kbd>0</kbd> – <kbd>9</kbd>    <span>Saut à 0% – 90%</span></div>
+          <div class="kbd-row"><kbd>&lt;</kbd> <kbd>&gt;</kbd> <span>Vitesse ± 0.25</span></div>
+          <div class="kbd-row"><kbd>I</kbd>                   <span>Afficher l'info actuelle</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Raccourcis Chrome (globaux)</h2>
+        <p class="muted">Configurables dans <a href="#" id="openShortcuts">chrome://extensions/shortcuts</a>.</p>
+        <ul class="kbd-list">
+          <li><kbd>Alt + Shift + C</kbd> — Ouvrir le popup</li>
+          <li><kbd>Alt + Shift + O</kbd> — Ouvrir cette page</li>
+          <li>Activer / désactiver l'extension <span class="muted">(à configurer)</span></li>
+          <li>Cycler les thèmes <span class="muted">(à configurer)</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!--  AVANCÉ                                                      -->
+    <!-- ============================================================ -->
+    <section class="panel" data-panel="advanced">
+      <div class="card">
+        <h2>Globaux</h2>
+
+        <div class="toggle-list" id="globalList">
+          <!-- généré par options.js -->
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Sauvegarde des réglages</h2>
+        <p class="muted">Exporte un fichier JSON pour le partager ou le restaurer ailleurs.</p>
+
+        <div class="actions">
+          <button class="btn ghost" id="exportBtn">↗ Exporter (.json)</button>
+          <button class="btn ghost" id="importBtn">↙ Importer (.json)</button>
+          <input type="file" id="importFile" accept="application/json" hidden />
+          <button class="btn danger" id="resetBtn">⟲ Tout réinitialiser</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Diagnostic</h2>
+        <pre class="diag" id="diag">…</pre>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!--  À PROPOS                                                    -->
+    <!-- ============================================================ -->
+    <section class="panel" data-panel="about">
+      <div class="card">
+        <h2>Crunchyroll Modernizer</h2>
+        <p>Une extension Chrome qui modernise l'interface de Crunchyroll : thèmes, animations soignées, lecteur premium et raccourcis clavier.</p>
+        <ul class="features">
+          <li>15+ modules indépendants pilotés par data-attributes CSS</li>
+          <li>5 presets de thèmes + accent HSL personnalisé</li>
+          <li>Raccourcis clavier complets sur le lecteur (style YouTube)</li>
+          <li>Refonte de l'agenda / simulcast calendar</li>
+          <li>Service worker MV3 + page d'options dédiée</li>
+          <li>Aucune donnée envoyée à l'extérieur — tout reste local</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>Crédits & licence</h2>
+        <p class="muted">Cette extension est créée à titre personnel et n'est pas affiliée à Crunchyroll Inc. Voir le fichier <code>LICENSE</code> du projet.</p>
+      </div>
+    </section>
+  </main>
+
+  <div class="status" id="status" aria-live="polite"></div>
+
+  <script src="options.js"></script>
+</body>
+</html>

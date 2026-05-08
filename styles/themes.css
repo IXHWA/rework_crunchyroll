@@ -1,0 +1,89 @@
+/* =====================================================================
+   CR MODERNIZER · THÈMES
+   Cinq presets sélectionnables via data-cr-theme="orange|sakura|mint|neon|mono"
+   Chaque preset n'override QUE les variables d'accent / glow / surfaces tintées.
+   Les variables de layout, espacements, polices ne bougent pas.
+   ===================================================================== */
+
+/* ------------------------------------------------------------------ */
+/*  ORANGE (par défaut, identique à v2.x — esprit Crunchyroll)        */
+/* ------------------------------------------------------------------ */
+html[data-cr-theme="orange"] {
+  --cr-orange:        #ff7a1a;
+  --cr-orange-soft:   #ff9a4d;
+  --cr-orange-deep:   #d65500;
+  --cr-orange-glow:   rgba(255, 122, 26, 0.32);
+  --cr-orange-tint:   rgba(255, 122, 26, 0.10);
+}
+
+/* ------------------------------------------------------------------ */
+/*  SAKURA — rose poudré, chaud et doux                               */
+/* ------------------------------------------------------------------ */
+html[data-cr-theme="sakura"] {
+  --cr-orange:        #ff5d8f;   /* nom conservé pour compat (= accent) */
+  --cr-orange-soft:   #ff8fb3;
+  --cr-orange-deep:   #c43673;
+  --cr-orange-glow:   rgba(255, 93, 143, 0.34);
+  --cr-orange-tint:   rgba(255, 93, 143, 0.10);
+}
+
+/* ------------------------------------------------------------------ */
+/*  MINT — turquoise / vert d'eau, frais                              */
+/* ------------------------------------------------------------------ */
+html[data-cr-theme="mint"] {
+  --cr-orange:        #2cd9b8;
+  --cr-orange-soft:   #6be4cb;
+  --cr-orange-deep:   #1aa790;
+  --cr-orange-glow:   rgba(44, 217, 184, 0.32);
+  --cr-orange-tint:   rgba(44, 217, 184, 0.10);
+}
+
+/* ------------------------------------------------------------------ */
+/*  NEON — violet/cyan, esprit cyberpunk                              */
+/* ------------------------------------------------------------------ */
+html[data-cr-theme="neon"] {
+  --cr-orange:        #b16dff;
+  --cr-orange-soft:   #d09bff;
+  --cr-orange-deep:   #7c3df0;
+  --cr-orange-glow:   rgba(177, 109, 255, 0.34);
+  --cr-orange-tint:   rgba(177, 109, 255, 0.12);
+}
+
+/* ------------------------------------------------------------------ */
+/*  MONO — accent gris clair, ultra-discret                           */
+/* ------------------------------------------------------------------ */
+html[data-cr-theme="mono"] {
+  --cr-orange:        #e4e4e7;
+  --cr-orange-soft:   #ffffff;
+  --cr-orange-deep:   #a1a1aa;
+  --cr-orange-glow:   rgba(228, 228, 231, 0.20);
+  --cr-orange-tint:   rgba(228, 228, 231, 0.06);
+}
+
+/* ------------------------------------------------------------------ */
+/*  ACCENT PERSONNALISÉ — le user fournit une teinte HSL                */
+/*  content.js applique inline :                                       */
+/*     --cr-accent-h, --cr-accent-s, --cr-accent-l                     */
+/*  data-cr-accent-custom="on" écrase alors les variables du preset.  */
+/* ------------------------------------------------------------------ */
+html[data-cr-accent-custom="on"] {
+  --cr-orange:
+    hsl(var(--cr-accent-h, 22) var(--cr-accent-s, 100%) var(--cr-accent-l, 55%));
+  --cr-orange-soft:
+    hsl(var(--cr-accent-h, 22) var(--cr-accent-s, 100%)
+        calc(var(--cr-accent-l, 55%) + 12%));
+  --cr-orange-deep:
+    hsl(var(--cr-accent-h, 22) var(--cr-accent-s, 100%)
+        calc(var(--cr-accent-l, 55%) - 12%));
+  --cr-orange-glow:
+    hsl(var(--cr-accent-h, 22) var(--cr-accent-s, 100%)
+        var(--cr-accent-l, 55%) / 0.32);
+  --cr-orange-tint:
+    hsl(var(--cr-accent-h, 22) var(--cr-accent-s, 100%)
+        var(--cr-accent-l, 55%) / 0.10);
+}
+
+/* ------------------------------------------------------------------ */
+/*  ZOOM CARTES — content.js règle directement --cr-card-zoom inline  */
+/*  (la valeur par défaut est définie dans tokens.css).                */
+/* ------------------------------------------------------------------ */
