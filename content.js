@@ -29,7 +29,11 @@
       p.includes("/calendar") ||
       p.includes("/agenda")
     ) kind = "agenda";
-    else if (p.includes("/series/") || p.includes("/movie")) kind = "detail";
+    else if (
+      p.includes("/series/") ||
+      p.includes("/show/") ||
+      /\/movies?(\/|$)/i.test(p)
+    ) kind = "detail";
     else if (
       p.includes("/videos/") ||
       p.includes("/browse") ||
@@ -61,6 +65,9 @@
     /* L'agenda s'auto-installe si on arrive dessus.
        Le poll interne gérera le timing après le rendu React. */
     if (typeof setupAgenda === "function") setTimeout(setupAgenda, 350);
+    /* pushState/replaceState ne déclenchent pas popstate : on relance le
+       motion (reveal, images) après chaque navigation SPA. */
+    if (typeof setupMotionAll === "function") setTimeout(setupMotionAll, 320);
   }
 
   function triggerPageTransition() {
@@ -331,6 +338,8 @@
 
   function killHoverPanels(root) {
     if (html.getAttribute("data-cr-minimal-cards") !== "on") return;
+    /* Page série : panneaux « hover » parfois légitimes (infos épisode) */
+    if (html.getAttribute(FLAG_PAGE) === "detail") return;
     const scope = root && root.querySelectorAll ? root : document;
     const all = scope.querySelectorAll("*");
     for (let i = 0; i < all.length; i++) {
@@ -433,6 +442,9 @@
   function dedupePlayableEpisodeTitles() {
     if (html.getAttribute("data-cr-enabled") !== "on") return;
     if (html.getAttribute("data-cr-modern-cards") !== "on") return;
+    /* Accueil / catalogue uniquement — sur la fiche série ça peut casser la liste d’épisodes */
+    const pg = html.getAttribute(FLAG_PAGE);
+    if (pg === "detail" || pg === "player" || pg === "account" || pg === "agenda") return;
 
     clearDedupeMarks();
 
@@ -537,10 +549,12 @@
   /*  MOTION — reveal au scroll, fade-in image, transitions de page      */
   /* =================================================================== */
 
+  /* Pas de sélecteur « section » nu : sur les pages série il attrape
+     les blocs d’onglets / panneaux cachés → opacity 0 définitive si l’IO
+     ne se déclenche jamais. Même logique pour les grilles hors browse. */
   const REVEAL_SEL =
     '.erc-feed > section, [class*="feed-section"], ' +
     '[class*="hero-carousel"], ' +
-    'section, ' +
     '[class*="collection-card"], ' +
     '[class*="continue-watching"]:not(item), ' +
     '[class*="watchlist"]:not(item)';
@@ -551,8 +565,29 @@
 
   let revealIO = null;
 
+  function stripRevealAttributes() {
+    document.querySelectorAll("[data-cr-reveal]").forEach((el) => {
+      el.removeAttribute("data-cr-reveal");
+    });
+    document.querySelectorAll("[data-cr-reveal-children]").forEach((el) => {
+      el.removeAttribute("data-cr-reveal-children");
+    });
+  }
+
   function setupReveal() {
     if (html.getAttribute("data-cr-motion") !== "on") return;
+
+    const page = html.getAttribute(FLAG_PAGE);
+    /* Reveal au scroll : uniquement accueil + catalogue (grilles feed). */
+    if (page !== "home" && page !== "browse") {
+      if (revealIO) {
+        revealIO.disconnect();
+        revealIO = null;
+      }
+      stripRevealAttributes();
+      return;
+    }
+
     if (revealIO) revealIO.disconnect();
 
     revealIO = new IntersectionObserver(
@@ -660,10 +695,8 @@
     ric(setupMotionAll, { timeout: 600 });
   }
 
-  /* Re-setup léger à chaque navigation SPA (après un court délai pour
-     laisser React peindre les nouveaux nœuds) */
-  const navRetune = () => setTimeout(setupMotionAll, 320);
-  window.addEventListener("popstate", navRetune);
+  /* setupMotionAll est déjà invoqué depuis onNavigate (pushState / popstate /
+     hashchange) — pas de second listener popstate pour éviter les doublons. */
 
   /* Observer secondaire : nouveaux nœuds → re-instrumenter motion */
   let motionPending = false;

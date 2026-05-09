@@ -83,3 +83,24 @@ html[data-cr-motion="on"] img[data-cr-fade][data-cr-img-loaded="1"] {
     scroll-behavior: smooth;
   }
 }
+
+/* ------------------------------------------------------------------ */
+/*  Sécurité : pages où le reveal ne doit jamais masquer le contenu     */
+/*  (restes d’attributs après navigation SPA, onglets jamais visibles…)  */
+/* ------------------------------------------------------------------ */
+
+html[data-cr-motion="on"][data-cr-page="detail"] [data-cr-reveal="false"],
+html[data-cr-motion="on"][data-cr-page="player"] [data-cr-reveal="false"],
+html[data-cr-motion="on"][data-cr-page="account"] [data-cr-reveal="false"],
+html[data-cr-motion="on"][data-cr-page="agenda"] [data-cr-reveal="false"] {
+  opacity: 1;
+  transform: none;
+  will-change: auto;
+}
+
+html[data-cr-motion="on"][data-cr-page="detail"] [data-cr-reveal-children="true"] > *,
+html[data-cr-motion="on"][data-cr-page="player"] [data-cr-reveal-children="true"] > *,
+html[data-cr-motion="on"][data-cr-page="account"] [data-cr-reveal-children="true"] > *,
+html[data-cr-motion="on"][data-cr-page="agenda"] [data-cr-reveal-children="true"] > * {
+  animation: none;
+}

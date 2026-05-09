@@ -36,8 +36,19 @@ html[data-cr-modern-detail="on"][data-cr-page="detail"] [class*="hero"] h1 {
   text-shadow: 0 2px 16px rgba(0, 0, 0, 0.55);
 }
 
-/* Titre principal */
-html[data-cr-modern-detail="on"][data-cr-page="detail"] h1 {
+/* CTA / liens au-dessus du voile hero (::after z-index 1) */
+html[data-cr-modern-detail="on"][data-cr-page="detail"] [class*="hero"] a,
+html[data-cr-modern-detail="on"][data-cr-page="detail"] [class*="hero"] button {
+  position: relative;
+  z-index: 3;
+}
+
+/* Titre principal de la série — limité au hero / en-tête (pas tous les h1) */
+html[data-cr-modern-detail="on"][data-cr-page="detail"] [class*="hero"]:not([class*="card"]) h1,
+html[data-cr-modern-detail="on"][data-cr-page="detail"] [class*="show-hero"] h1,
+html[data-cr-modern-detail="on"][data-cr-page="detail"] [class*="series-hero"] h1,
+html[data-cr-modern-detail="on"][data-cr-page="detail"] [class*="series-header"] h1,
+html[data-cr-modern-detail="on"][data-cr-page="detail"] [class*="title-block"] h1 {
   font-weight: 800;
   letter-spacing: -0.02em;
   font-size: clamp(32px, 4vw, 56px);
@@ -101,9 +112,10 @@ html[data-cr-modern-detail="on"][data-cr-page="detail"] [class*="synopsis"] {
   max-width: 70ch;
 }
 
-/* Onglets (Episodes / Personnages / Plus) */
+/* Onglets (Episodes / Personnages / Plus) — tablist / tab-list uniquement,
+   pas tout élément dont la classe contient « tabs » (carrousels, etc.). */
 html[data-cr-modern-detail="on"][data-cr-page="detail"] [role="tablist"],
-html[data-cr-modern-detail="on"][data-cr-page="detail"] [class*="tabs"] {
+html[data-cr-modern-detail="on"][data-cr-page="detail"] [class*="tab-list"] {
   border-bottom: 1px solid var(--cr-border);
   gap: var(--cr-s-1);
 }
@@ -152,7 +164,8 @@ html[data-cr-modern-detail="on"][data-cr-page="detail"] [class*="episode-list-it
 html[data-cr-modern-detail="on"][data-cr-page="detail"] [class*="episode-card"]:hover {
   background: var(--cr-bg-elev-2) !important;
   border-color: var(--cr-border-strong) !important;
-  transform: translateX(4px);
+  /* translateX cassait souvent le défilement horizontal des rangées */
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
 }
 
 /* Sélecteur de saison */
